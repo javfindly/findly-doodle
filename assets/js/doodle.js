@@ -4,6 +4,7 @@
 var PixelJS = require('./vendors/pixel.js');
 var Bee = require('./bee.js');
 var Hive = require('./hive.js');
+var CollectableElement = require('./collectable_element.js');
 
 var Doodle = function() {
   this.initialize();
@@ -18,12 +19,16 @@ Doodle.prototype.initialize = function() {
     height: 600
   });
   this.hive = new Hive(this.game);
-  this.beePlayer = new Bee(this.game);
+  this.beePlayer = new Bee(this.game);  
+  this.collectableElement = new CollectableElement(this.game);
 }
 
 Doodle.prototype.start = function() {
   console.log('Starting Doodle...');
-  this.game.loadAndRun(function (elapsedTime, dt) {});
+  var thisDoodle = this;
+  this.game.loadAndRun(function (elapsedTime, dt) {
+    thisDoodle.collectableElement.drop();
+  });
 }
 
 module.exports = Doodle;
