@@ -14,6 +14,7 @@ Doodle.prototype.initGame = function() {
         width: 800,
         height: 600
     });
+    this.hive = new Hive(this.game);
     this.beePlayer = new Bee(this.game);    
 }
 
