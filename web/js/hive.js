@@ -7,4 +7,29 @@ var Hive = function(game) {
     theHive.asset.prepare({ 
         name: 'hive.png'
     });
+
+    var hiveCollector = hiveLayer.createEntity();
+    hiveCollector.pos = { x: 715, y: 180 };
+    hiveCollector.size = { width: 50, height: 50 };
+    
+    hiveCollector.asset = new PixelJS.Sprite();
+    /*
+    // Print a black box in the position of the collector to see it and debug
+    hiveCollector.asset.prepare({ 
+        name: 'blackbox.png'
+    });
+    */
+
+    
+    hiveCollector.onCollide = function (entity) {
+        collideCandidate(entity);
+    };
+    
+    playerLayer.registerCollidable(player);
+
+    function collideCandidate(entity) {
+        if(entity.type == 'candidate') {
+            entity.dispose();
+        }
+    }
 }
