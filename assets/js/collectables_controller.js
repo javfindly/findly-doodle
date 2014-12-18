@@ -29,7 +29,6 @@ CollectablesController.prototype.getItem = function (id) {
 CollectablesController.prototype.createItem = function () {
   var time = new Date().getTime();
   if ((time - this.previousTime) > 1000) {
-    console.log('increase');
     this.initialVelocity += 20;
   }
   var velocity = {x:0, y: this.initialVelocity};
