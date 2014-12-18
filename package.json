@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify ./assets/js/main.js -o bundle.js",
+    "build": "browserify ./assets/js/main.js -o ./assets/bundle.js",
     "prestart": "npm install",
     "start": "node app.js"
   },

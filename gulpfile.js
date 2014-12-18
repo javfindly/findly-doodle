@@ -22,7 +22,7 @@ function bundle() {
   // optional, remove if you dont want sourcemaps
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
-  .pipe(sourcemaps.write('./')) // writes .map file
+  .pipe(sourcemaps.write('./assets')) // writes .map file
   //
-  .pipe(gulp.dest('./dist'));
+  .pipe(gulp.dest('./assets'));
 }
