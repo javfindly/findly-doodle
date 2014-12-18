@@ -6,6 +6,7 @@ var Bee = require('./bee.js');
 var Hive = require('./hive.js');
 var Config = require('./config.js');
 var CollectableElement = require('./collectable_element.js');
+var Background = require('./background/background.js');
 
 var Doodle = function() {
   this.initialize();
@@ -15,8 +16,12 @@ Doodle.prototype.initialize = function() {
   console.log('Initializing Doodle...');
   this.game = new PixelJS.Engine();
   this.game.init(Config.game);
+
+  this.background = new Background(this.game);
+  this.background.render();
+
   this.hive = new Hive(this.game);
-  this.beePlayer = new Bee(this.game);  
+  this.beePlayer = new Bee(this.game);
   this.collectableElement = new CollectableElement(this.game);
 }
 
