@@ -33,6 +33,7 @@ Doodle.prototype.start = function() {
   this.game.loadAndRun(function (elapsedTime, dt) {
     thisDoodle.collectablesController.updateCollectables();
     thisDoodle.beePlayer.update();
+    thisDoodle.background.update();
   });
 }
 

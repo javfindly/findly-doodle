@@ -19,6 +19,9 @@ Entity.prototype.addTo = function (layer) {
   this._setAsset();
   this._setPosition();
   this._setSize();
+  this._setVelocity();
+
+  return this;
 };
 
 Entity.prototype._setPosition = function () {
@@ -40,6 +43,16 @@ Entity.prototype._setSize = function () {
   this.entity.size = {
     width: this.options.width || 0,
     height: this.options.height || 0
+  };
+};
+
+Entity.prototype._setVelocity = function () {
+  if (!this.options.velocity || !_.isNumber(this.options.velocity.x) || !_.isNumber(this.options.velocity.y)) {
+    return;
+  }
+  this.entity.velocity = {
+    x: this.options.velocity.x || 0,
+    y: this.options.velocity.y || 0
   };
 };
 
@@ -73,12 +86,9 @@ Entity.prototype._sound = function () {
 
 Entity.prototype._sprite = function () {
   this.entity.asset = new PixelJS.Sprite();
-  this.entity.asset.prepare({
-    name: this.options.asset.filename//,
-    // size: {
-    //   width: this.options.asset.width,
-    //   height: this.options.asset.height
-    // }
+
+  this.entity.asset.load({
+    name: this.options.asset.filename
   });
 };
 
