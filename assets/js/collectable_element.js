@@ -30,7 +30,7 @@ CollectableElement.prototype.update = function () {
 };
 
 CollectableElement.prototype.fall = function (entity) {
-  if (entity.pos.y > config.game.height) {
+    if (entity.pos.y > config.game.height) {
     this.dispose();
     window.doodle.collectablesController.removeItem(entity.id);
     $(document).trigger("game.lifeLost");

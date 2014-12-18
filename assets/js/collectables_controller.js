@@ -12,6 +12,7 @@ var CollectablesController = function (game) {
   }
   this.game = game;
   this.itemMap = {};
+  this.notRandomTypes = [];
   this.initialize();
 };
 
@@ -19,8 +20,19 @@ CollectablesController.prototype.initialize = function () {
   this.elementsLayer = this.game.createLayer("collectables");
   this.previousTime = new Date().getTime();
   this.initialVelocity = Config.game.falling_objects_velocity;
+  this._assignRandomValues();
   this.createItem();
 };
+
+CollectablesController.prototype._assignRandomValues = function () {
+  var i = 0;
+  for (; i < 9; i++) {
+    this.notRandomTypes[i] = CONSTANTS.COLLECTABLES_PROPERTIES.CANDIDATE;
+  }
+  for (; i < 10; i++) {
+    this.notRandomTypes[i] = CONSTANTS.COLLECTABLES_PROPERTIES.LIFE;
+  }
+}
 
 CollectablesController.prototype.dropCollectables = function () {
   _.each(this.itemMap, function(entity){
@@ -37,14 +49,20 @@ CollectablesController.prototype.createItem = function () {
   if ((time - this.previousTime) > 1000) {
     this.initialVelocity += 20;
   }
-  var options = { name: 'collectable', asset: {type: 'sprite', filename: 'hiveblock.png' }, x: Math.floor(Math.random() * 600) + 1, y: 0, velocity: { x:0, y:this.initialVelocity }};
+  var options = { name: 'collectable',
+            x: Math.floor(Math.random() * 600) + 1, y: 0,
+            velocity: { x:0, y:this.initialVelocity },
+            id: "collectable_" + (new Date().getTime()),
+            type: CONSTANTS.COLLECTABLE.TYPE,
+            status: CONSTANTS.COLLECTABLE.STATUS.FALLING
+            };
+  var index = Math.floor(Math.random() * this.notRandomTypes.length);
+  console.log(this.notRandomTypes);
+  console.log(index);
+
+  _.extend(options, this.notRandomTypes[index]);
   var collectableElement = new CollectableElement(options);
   collectableElement.addTo(this.elementsLayer);
-  collectableElement.entity.id = "collectable_" + (new Date().getTime());
-  collectableElement.entity.type = CONSTANTS.COLLECTABLE.TYPE;
-  collectableElement.entity.status = CONSTANTS.COLLECTABLE.STATUS.FALLING;
-  collectableElement.entity.points = 5;
-
   this.itemMap[collectableElement.entity.id] = collectableElement;
   this.elementsLayer.registerCollidable(collectableElement.entity);
 };
