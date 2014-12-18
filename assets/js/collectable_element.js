@@ -4,8 +4,10 @@ var PixelJS = require('./vendors/pixel.js');
 var $ = require('jquery');
 var CONSTANTS = require('./constants.js');
 var config = require('./config.js');
+var _ = require('lodash');
 
 var CollectableElement = function (layer, velocity) {
+  _.bindAll(this, 'fall', 'pickUp', 'collect', 'dispose');
   this.collectableEntity = layer.createEntity();
 
   this.collectableEntity.pos = { x: Math.floor(Math.random() * 600) + 1, y: 0 };
@@ -23,7 +25,7 @@ var CollectableElement = function (layer, velocity) {
 
 CollectableElement.prototype.CONSTANTS = CONSTANTS;
 
-CollectableElement.prototype.update = function() {
+CollectableElement.prototype.update = function () {
   var actions = {};
   actions[CONSTANTS.COLLECTABLE.STATUS.FALLING] = this.fall;
   actions[CONSTANTS.COLLECTABLE.STATUS.PICKED_UP] = this.pickUp;
@@ -34,7 +36,7 @@ CollectableElement.prototype.update = function() {
 
 CollectableElement.prototype.fall = function (entity) {
   if (entity.pos.y > config.game.height) {
-    entity.dispose();
+    this.dispose();
     window.doodle.collectablesController.removeItem(entity.id);
     $(document).trigger("game.lifeLost");
   }
@@ -46,10 +48,8 @@ CollectableElement.prototype.pickUp = function (entity) {
 };
 
 CollectableElement.prototype.collect = function (entity) {
-  this.changeStatus( CONSTANTS.COLLECTABLE.STATUS.DISPOSED );
-  entity.fadeTo(0,500,function(){
-    entity.dispose();
-  })
+  this.changeStatus(CONSTANTS.COLLECTABLE.STATUS.DISPOSED);
+  entity.fadeTo(0, 500, this.dispose);
   window.doodle.collectablesController.removeItem(entity.id);
 };
 
