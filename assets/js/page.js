@@ -11,6 +11,7 @@ MainPage.prototype.start = function() {
 	var self = this;
 	$(document).bind("game.lost", function(e) {
 		self.gameLost(window.doodle.score.currentScore);
+		window.doodle.freeze();
 	})
 };
 
@@ -34,7 +35,7 @@ MainPage.prototype.loadTemplate = function(src, callback) {
         url: src,
         success: function(data) {
             source    = data;
-            template  = handlebars.compile(source);     
+            template  = handlebars.compile(source);
             //execute the callback if passed
             if (callback) callback(template);
         }
