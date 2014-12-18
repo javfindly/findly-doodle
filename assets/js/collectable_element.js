@@ -1,7 +1,7 @@
 "use strict";
 
 var PixelJS = require('./vendors/pixel.js');
-
+var $ = require('jquery');
 var CONSTANTS = require('./constants.js');
 var config = require('./config.js');
 
@@ -31,9 +31,10 @@ CollectableElement.prototype.update = function() {
   var entity = this.collectableEntity;
   switch(entity.status) {
     case CONSTANTS.COLLECTABLE.STATUS.FALLING:
-      if (entity.pos.y > config.height) {
+      if (entity.pos.y > config.game.height) {
         entity.dispose();
         window.doodle.collectablesController.removeItem(entity.id);
+        $(document).trigger("game.lifeLost");
       }
       entity.moveDown();
       break;
