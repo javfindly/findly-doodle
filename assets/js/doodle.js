@@ -38,7 +38,6 @@ Doodle.prototype.start = function() {
     thisDoodle.collectablesController.updateCollectables();
     thisDoodle.beePlayer.update();
     thisDoodle.background.update();
-    // thisDoodle.score.updateScore(3); //example how to increase the score
   });
 }
 

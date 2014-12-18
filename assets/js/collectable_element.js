@@ -5,23 +5,14 @@ var $ = require('jquery');
 var CONSTANTS = require('./constants.js');
 var config = require('./config.js');
 var _ = require('lodash');
+var Entity = require('./utils/entity.js');
 
-var CollectableElement = function (layer, velocity) {
+var CollectableElement = function (options) {
   _.bindAll(this, 'fall', 'pickUp', 'collect', 'dispose');
-  this.collectableEntity = layer.createEntity();
-
-  this.collectableEntity.pos = { x: Math.floor(Math.random() * 600) + 1, y: 0 };
-  this.collectableEntity.velocity = velocity;
-  this.collectableEntity.asset = new PixelJS.Sprite();
-  this.collectableEntity.asset.load({
-    name: 'hiveblock.png'
-  });
-  this.collectableEntity.id = "collectable_" + (new Date().getTime());
-  this.collectableEntity.type = CONSTANTS.COLLECTABLE.TYPE;
-  this.collectableEntity.status = CONSTANTS.COLLECTABLE.STATUS.FALLING;
-  this.collectableEntity.points = 5;
-  layer.registerCollidable(this.collectableEntity);
+  Entity.call(this, options);
 };
+
+CollectableElement.prototype = Entity.prototype;
 
 CollectableElement.prototype.CONSTANTS = CONSTANTS;
 
@@ -31,7 +22,7 @@ CollectableElement.prototype.update = function () {
   actions[CONSTANTS.COLLECTABLE.STATUS.PICKED_UP] = this.pickUp;
   actions[CONSTANTS.COLLECTABLE.STATUS.COLLECTED] = this.collect;
 
-  actions[this.collectableEntity.status](this.collectableEntity);
+  actions[this.entity.status](this.entity);
 };
 
 CollectableElement.prototype.fall = function (entity) {
@@ -54,16 +45,16 @@ CollectableElement.prototype.collect = function (entity) {
 };
 
 CollectableElement.prototype.dispose = function () {
-  this.collectableEntity.dispose();
+  this.entity.dispose();
 };
 
 CollectableElement.prototype.changeStatus = function(newStatus) {
-  this.collectableEntity.status = newStatus;
+  this.entity.status = newStatus;
 }
 
 CollectableElement.prototype.attachToBee = function(bee) {
   this.changeStatus(CONSTANTS.COLLECTABLE.STATUS.PICKED_UP);
-  this.collectableEntity.attached = bee;
+  this.entity.attached = bee;
 }
 
 module.exports = CollectableElement;

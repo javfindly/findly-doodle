@@ -86,8 +86,8 @@ Bee.prototype.drop = function (entity) {
   _.each(this.entitiesCollected, function (item) {
     item.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
     window.doodle.soundManager.play(CONSTANTS.SOUNDS.DEPOSIT);
-    pointCollected += item.collectableEntity.points;
-    thisBee.removeEntity(item.collectableEntity);
+    pointCollected += item.entity.points;
+    thisBee.removeEntity(item.entity);
   });
   window.doodle.score.updateScore(pointCollected);
 };

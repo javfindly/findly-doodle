@@ -18,11 +18,13 @@ CollectablesController.prototype.initialize = function () {
   this.elementsLayer = this.game.createLayer("collectables");
   this.previousTime = new Date().getTime();
   this.initialVelocity = 100;
-  var collectableElement = new CollectableElement(this.elementsLayer, {x:0, y: this.initialVelocity});
-  this.itemMap[collectableElement.collectableEntity.id] = collectableElement;
+
+  this.createItem();
 };
 
 CollectablesController.prototype.dropCollectables = function () {
+  console.log('dropping');
+  console.log(this.itemMap);
   _.each(this.itemMap, function(entity){
     entity.update();
   });
@@ -37,10 +39,16 @@ CollectablesController.prototype.createItem = function () {
   if ((time - this.previousTime) > 1000) {
     this.initialVelocity += 20;
   }
-  var velocity = {x:0, y: this.initialVelocity};
-  var item = new CollectableElement(this.elementsLayer, velocity);
-  this.itemMap[item.collectableEntity.id] = item;
-  window.doodle.soundManager.play(CONSTANTS.SOUNDS.DROP);
+  var options = { name: 'collectable', asset: {type: 'sprite', filename: 'hiveblock.png' }, x: Math.floor(Math.random() * 600) + 1, y: 0, velocity: { x:0, y:this.initialVelocity }};
+  var collectableElement = new CollectableElement(options);
+  collectableElement.addTo(this.elementsLayer);
+  collectableElement.entity.id = "collectable_" + (new Date().getTime());
+  collectableElement.entity.type = CONSTANTS.COLLECTABLE.TYPE;
+  collectableElement.entity.status = CONSTANTS.COLLECTABLE.STATUS.FALLING;
+  collectableElement.entity.points = 5;
+
+  this.itemMap[collectableElement.entity.id] = collectableElement;
+  this.elementsLayer.registerCollidable(collectableElement.entity);
 };
 
 CollectablesController.prototype.removeItem = function (id) {
@@ -54,6 +62,7 @@ CollectablesController.prototype.updateCollectables = function () {
   this.dropCollectables();
   if ((time - this.previousTime) > 2000) {
       this.createItem();
+      window.doodle.soundManager.play(CONSTANTS.SOUNDS.DROP);
       this.previousTime = time;
   }
 }
