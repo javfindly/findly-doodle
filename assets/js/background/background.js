@@ -36,7 +36,7 @@ Background.prototype.update = function () {
   });
 };
 
-Background.prototype.generateEntities = function (number) {
+Background.prototype.generateClouds = function (number) {
   this.entityCollection.clouds = [];
   while (number-- > 0) {
     var cloud = new CloudEntity();
