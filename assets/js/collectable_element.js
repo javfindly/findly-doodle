@@ -27,15 +27,20 @@ var CollectableElement = function (layer, velocity) {
 CollectableElement.prototype.CONSTANTS = CONSTANTS;
 
 CollectableElement.prototype.update = function(velocity) {
-  switch(this.collectableEntity.status) {
+  var entity = this.collectableEntity;
+  switch(entity.status) {
     case CONSTANTS.COLLECTABLE.STATUS.FALLING:
-      this.collectableEntity.moveDown();
+      if (entity.pos.y > 600) {
+        entity.dispose();
+        window.doodle.collectablesController.removeItem(entity.id);
+      }
+      entity.moveDown();
       break;
     case CONSTANTS.COLLECTABLE.STATUS.PICKED_UP:
-      this.collectableEntity.moveTo(this.collectableEntity.attached.pos.x,this.collectableEntity.attached.pos.y + this.collectableEntity.attached.size.height - 10);
+      entity.moveTo(entity.attached.pos.x,entity.attached.pos.y + entity.attached.size.height - 10);
       break;
     case CONSTANTS.COLLECTABLE.STATUS.COLLECTED:
-      var entity = this.collectableEntity;
+
       this.changeStatus( CONSTANTS.COLLECTABLE.STATUS.DISPOSED );
       entity.fadeTo(0,500,function(){
         entity.dispose();

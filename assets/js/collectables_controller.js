@@ -34,7 +34,9 @@ CollectablesController.prototype.createItem = function () {
   }
   var velocity = {x:0, y: this.initialVelocity};
   var item = new CollectableElement(this.elementsLayer, velocity);
-  this.itemMap[item.collectableEntity.id] =  item;
+  this.itemMap[item.collectableEntity.id] = item;
+
+  console.log(Object.keys(this.itemMap).length);
 };
 
 CollectablesController.prototype.removeItem = function (id) {
