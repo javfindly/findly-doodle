@@ -12,7 +12,7 @@ var Bee = function(game) {
   this.player.pos = { x: 200, y: 300 };
   this.player.allowDiagonalMovement = true;
   this.player.size = { width: 46, height: 57 };
-  this.player.velocity = { x: 200, y: 250 };
+  this.player.velocity = { x: 500, y: 400 };
   this.player.asset = new PixelJS.AnimatedSprite();
   this.player.asset.prepare({
     name: 'bee_test.png',
