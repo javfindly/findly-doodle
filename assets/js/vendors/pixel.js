@@ -1351,31 +1351,31 @@ PixelJS.Player.prototype.update = function (elapsedTime, dt) {
             }
             this.moveRight();
         }
-        else if ((this.direction & PixelJS.Directions.Up) != 0) {
+        if ((this.direction & PixelJS.Directions.Up) != 0) {
             if (this.isAnimatedSprite) {
                 this.asset.row = this._directionRowMap.up;
                 this.asset.startAnimating();
             }
             this.moveUp();
         }
-        else if ((this.direction & PixelJS.Directions.Left) != 0) {
+        if ((this.direction & PixelJS.Directions.Left) != 0) {
             if (this.isAnimatedSprite) {
                 this.asset.row = this._directionRowMap.left;
                 this.asset.startAnimating();
             }
             this.moveLeft();
         }
-        else if ((this.direction & PixelJS.Directions.Down) != 0) {
+        if ((this.direction & PixelJS.Directions.Down) != 0) {
             if (this.isAnimatedSprite) {
                 this.asset.row = this._directionRowMap.down;
                 this.asset.startAnimating();
             }
             this.moveDown();
         }
-        else {
-            if (this.isAnimatedSprite) {
-                this.asset.stopAnimating();
-            }
+        if (!this.direction || PixelJS.Directions.Down == 0) {
+          if (this.isAnimatedSprite) {
+            this.asset.stopAnimating();
+          }
         }
     }
 
