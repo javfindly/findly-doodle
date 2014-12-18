@@ -6,11 +6,21 @@ var CollectableElement = require('./collectable_element.js');
 var Config = require('./config.js');
 var $ = require('jquery');
 var CONSTANTS = require('./constants.js');
+var _ = require('lodash');
 var CollectablesController = require('./collectables_controller.js');
 
 var Bee = function(game) {
-  var playerLayer = game.createLayer("players");
+  _.bindAll(this, 'whenCollision', 'collect', 'drop');
   var self = this;
+  var playerLayer = game.createLayer("players");
+
+  this.entitiesCollected = {};
+  this.countCollector = 0;
+  this.history = {
+    count: 0,
+    collectedIds: []
+  };
+
   this.player = new PixelJS.Player();
   this.player.addToLayer(playerLayer);
 
@@ -26,41 +36,112 @@ var Bee = function(game) {
     speed: 100,
     defaultFrame: 1
   });
-
-  this.player.life = 5;
-
+  
   this.player.onCollide(function (entity) {
-    collideCandidate(entity);
+  self.whenCollision(entity);
+
   });
 
-  var lifeLayer = game.createLayer("life");
-
-  $(document).bind( "game.lifeLost", this.lifeLost);
-
   playerLayer.registerCollidable(this.player);
-  var self = this;
+  this.initLife(game);
+};
 
-  function collideCandidate(entity) {
-    if(entity.type == CONSTANTS.COLLECTABLE.TYPE) {
-      var collectableItem = window.doodle.collectablesController.getItem(entity.id);
-      if(collectableItem && collectableItem.collectableEntity && collectableItem.collectableEntity.status == CONSTANTS.COLLECTABLE.STATUS.FALLING) {
-        collectableItem.attachToBee(self.player);
+
+Bee.prototype.whenCollision = function (entity) {
+  switch(entity.type) {
+    case CONSTANTS.COLLECTABLE.TYPE:
+      if (!_.contains(this.history.collectedIds, entity.id)) {
+        this.collect(entity);
       }
-    }
+      break;
+    case CONSTANTS.HIVE.TYPE:
+      if (Object.keys(this.entitiesCollected).length > 0) {
+        this.drop(entity);
+      }
+      break;
+  }
+}
+
+Bee.prototype.collect = function (entity) {
+  if (this.history.count >= Config.game.max_collectable) {
+    return;
+  }
+
+  if (this['_' + entity.type + 'Collected'] instanceof Function) {
+    this['_' + entity.type + 'Collected'](entity);
+  }  
+};
+
+Bee.prototype._candidateCollected = function (entity) {
+  this.addEntity(entity);
+  var collectableItem = window.doodle.collectablesController.getItem(entity.id);
+  if(collectableItem) {
+    collectableItem.attachToBee(this.player);
   }
 };
 
-Bee.prototype.update = function() {
-  this.player.canMoveDown = (this.player.pos.y + this.player.size.height) < Config.game.height - 20;
-  this.player.canMoveUp = this.player.pos.y > 10;
-  this.player.canMoveLeft = this.player.pos.x > 10;
-  this.player.canMoveRight = (this.player.pos.x + this.player.size.width) < Config.game.width - 10;
+Bee.prototype.drop = function (entity) {
+  var thisBee = this;
+  _.each(this.entitiesCollected, function (item) {
+    item.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
+    thisBee.removeEntity(item.collectableEntity);
+  });
+};
+
+Bee.prototype.addEntity = function (entity) {
+  this.entitiesCollected[entity.id] = window.doodle.collectablesController.getItem(entity.id);
+  this.history.collectedIds.push(entity.id);
+  this.history.count++;
+};
+
+Bee.prototype.removeEntity = function (entity) {
+  delete this.entitiesCollected[entity.id];
+  this.history.count--;
 }
 
-Bee.prototype.lifeLost = function() {
+Bee.prototype.update = function() {
+  if(this.player.life > 0) {
+    this.player.canMoveDown = (this.player.pos.y + this.player.size.height) < Config.game.height - 20;
+    this.player.canMoveUp = this.player.pos.y > 10;
+    this.player.canMoveLeft = this.player.pos.x > 10;
+    this.player.canMoveRight = (this.player.pos.x + this.player.size.width) < Config.game.width - 10;
+  } else {
+    this.player.canMoveDown = false;
+    this.player.canMoveUp = false;
+    this.player.canMoveLeft = false;
+    this.player.canMoveRight = false;
+  }
+}
+
+Bee.prototype.initLife = function(game) {
+  var self = this;
+  self.player.life = 5;
+  self.lifes = [];
+  var lifeLayer = game.createLayer("life");
+  for(var i = 0; i < self.player.life; i++) {
+    var lifeEntity = lifeLayer.createEntity();
+    lifeEntity.size = { width: 50, height: 50 };
+    var xOffset = Config.game.width - (lifeEntity.size.width + 10) * (i+1);
+    lifeEntity.pos = { x: xOffset , y: 20 };
+    lifeEntity.asset = new PixelJS.Sprite();
+    lifeEntity.asset.prepare({
+      name: 'life.png'
+    });
+    self.lifes.push(lifeEntity);
+  }
+  $(document).bind("game.lifeLost", function(e) {
+    self.lifeLost(self,e)
+  });
+}
+
+Bee.prototype.lifeLost = function(self,e) {
   self.player.life--;
   if(self.player.life <= 0) {
-
+    $(document).trigger("game.lost");
+  }
+  var lifeEntity = self.lifes.shift();
+  if(lifeEntity) {
+    lifeEntity.dispose();
   }
 }
 
