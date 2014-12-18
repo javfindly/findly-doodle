@@ -216,7 +216,7 @@ PixelJS.Engine = function () {
     this.scene = { container: undefined, width: 0, height: 0 };
     this._deltaTime = 0; // _deltaTime contains the time in fractional seconds since the last update
     this._fullscreenRequested = false;
-    this._events = { keydown: [], keyup: [], mousemove: [], mousedown: [], mouseup: [] };
+    this._events = { keydown: [], keyup: [], mousemove: [], mousedown: [], mouseup: [], serverkeydown: [], serverkeyup: [] };
     this._inputLayer = [];
     this._layerKeys = [];
     this._layers = {};
@@ -229,6 +229,7 @@ PixelJS.Engine = function () {
 
     var self = this;
     document.onkeydown = function (e) {
+        console.log(e)
         e = e || event; // Small hack to get the event args in IE
         var keyCode = e.keyCode;
         var listeners = self._events.keydown;
@@ -251,6 +252,30 @@ PixelJS.Engine = function () {
             });
         }
     };
+
+    document.addEventListener('serverkeydown',function(e){
+        e = e || event; // Small hack to get the event args in IE
+        var keyCode = e.detail.keyCode;
+        var listeners = self._events.serverkeydown;
+        if (listeners.length > 0) {
+            e.preventDefault();
+            listeners.forEach(function(listener) {
+                listener(keyCode);
+            });
+        }
+    });
+
+    document.addEventListener('serverkeyup',function(e){
+        e = e || event; // Small hack to get the event args in IE
+        var keyCode = e.detail.keyCode;
+        var listeners = self._events.serverkeyup;
+        if (listeners.length > 0) {
+            e.preventDefault();
+            listeners.forEach(function(listener) {
+                listener(keyCode);
+            });
+        }
+    });
 
     this._resizeHandler = function () {
         self.scene.container.style.width =  window.innerWidth + "px";
@@ -1268,6 +1293,7 @@ PixelJS.Player = function () {
 
     this.direction = 0;
     this.allowDiagonalMovement = false;
+    this.serverPlayer = false;
 };
 
 PixelJS.extend(PixelJS.Player, PixelJS.Entity);
@@ -1277,50 +1303,95 @@ PixelJS.Player.prototype.addToLayer = function (layer) {
     var self = this;
     layer.addComponent(this);
     this.layer = layer;
+    if(this.serverPlayer) {
+        this.layer.engine.on('serverkeydown', function (keyCode) {
+            switch (keyCode) {
+                case PixelJS.Keys.Left:
+                    self.direction |= PixelJS.Directions.Left;
+                    break;
 
-    this.layer.engine.on('keydown', function (keyCode) {
-        switch (keyCode) {
-            case PixelJS.Keys.Left:
-                self.direction |= PixelJS.Directions.Left;
-                break;
+                case PixelJS.Keys.Up:
+                    self.direction |= PixelJS.Directions.Up;
+                    break;
 
-            case PixelJS.Keys.Up:
-                self.direction |= PixelJS.Directions.Up;
-                break;
+                case PixelJS.Keys.Right:
+                    self.direction |= PixelJS.Directions.Right;
+                    break;
 
-            case PixelJS.Keys.Right:
-                self.direction |= PixelJS.Directions.Right;
-                break;
+                case PixelJS.Keys.Down:
+                    self.direction |= PixelJS.Directions.Down;
+                    break;
+            }
 
-            case PixelJS.Keys.Down:
-                self.direction |= PixelJS.Directions.Down;
-                break;
-        }
+            self.layer.requiresDraw = true;
+        });
 
-        self.layer.requiresDraw = true;
-    });
+        this.layer.engine.on('serverkeyup', function (keyCode) {
+            switch (keyCode) {
+                case PixelJS.Keys.Left:
+                    self.direction &= ~PixelJS.Directions.Left;
+                    break;
 
-    this.layer.engine.on('keyup', function (keyCode) {
-        switch (keyCode) {
-            case PixelJS.Keys.Left:
-                self.direction &= ~PixelJS.Directions.Left;
-                break;
+                case PixelJS.Keys.Up:
+                    self.direction &= ~PixelJS.Directions.Up;
+                    break;
 
-            case PixelJS.Keys.Up:
-                self.direction &= ~PixelJS.Directions.Up;
-                break;
+                case PixelJS.Keys.Right:
+                    self.direction &= ~PixelJS.Directions.Right;
+                    break;
 
-            case PixelJS.Keys.Right:
-                self.direction &= ~PixelJS.Directions.Right;
-                break;
+                case PixelJS.Keys.Down:
+                    self.direction &= ~PixelJS.Directions.Down;
+                    break;
+            }
 
-            case PixelJS.Keys.Down:
-                self.direction &= ~PixelJS.Directions.Down;
-                break;
-        }
+            self.layer.requiresDraw = true;
+        });
+    } else {    
+        this.layer.engine.on('keydown', function (keyCode) {
+            switch (keyCode) {
+                case PixelJS.Keys.Left:
+                    self.direction |= PixelJS.Directions.Left;
+                    break;
 
-        self.layer.requiresDraw = true;
-    });
+                case PixelJS.Keys.Up:
+                    self.direction |= PixelJS.Directions.Up;
+                    break;
+
+                case PixelJS.Keys.Right:
+                    self.direction |= PixelJS.Directions.Right;
+                    break;
+
+                case PixelJS.Keys.Down:
+                    self.direction |= PixelJS.Directions.Down;
+                    break;
+            }
+
+            self.layer.requiresDraw = true;
+        });
+
+        this.layer.engine.on('keyup', function (keyCode) {
+            switch (keyCode) {
+                case PixelJS.Keys.Left:
+                    self.direction &= ~PixelJS.Directions.Left;
+                    break;
+
+                case PixelJS.Keys.Up:
+                    self.direction &= ~PixelJS.Directions.Up;
+                    break;
+
+                case PixelJS.Keys.Right:
+                    self.direction &= ~PixelJS.Directions.Right;
+                    break;
+
+                case PixelJS.Keys.Down:
+                    self.direction &= ~PixelJS.Directions.Down;
+                    break;
+            }
+
+            self.layer.requiresDraw = true;
+        });
+    }
 
     return this;
 }

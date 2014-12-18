@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script type="text/javascript">
+		(function($) {
+	        var message = {
+			  	"message": {
+			    	"status":"true",
+			    	"event":"data",
+			    	"data": {}
+			  	}
+			}
+			document.addEventListener("keydown", function(evt) {
+				message.message.data.eventType = "serverkeydown";
+				message.message.data.eventData = {
+					keyCode: evt.keyCode
+				};
+				send(message);
+			}, false);
+			document.addEventListener("keyup", function(evt) {
+				message.message.data.eventType = "serverkeyup";
+				message.message.data.eventData = {
+					keyCode: evt.keyCode
+				};
+				send(message);
+		    }, false);
+			function send(eventData) {
+				var url = '//notifications-findly.rhcloud.com/doodle/notification/541/notify';
+				$.ajax({
+					type: 'POST',
+					url: url,
+					async: false,
+					data: JSON.stringify(eventData),
+					dataType: 'json',
+					contentType: "application/json",
+					//dataType: 'jsonp',
+					success: function(json) {
+						console.log(JSON.stringify(json));
+					},
+					error: function(e) {
+						console.log(e.message);
+					}
+				});
+			}
+			
+		})(jQuery);
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>

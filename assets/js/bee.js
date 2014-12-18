@@ -9,10 +9,11 @@ var CONSTANTS = require('./constants.js');
 var _ = require('lodash');
 var CollectablesController = require('./collectables_controller.js');
 
-var Bee = function(game) {
+var Bee = function(game,options) {
   _.bindAll(this, 'whenCollision', 'collect', 'drop');
   var self = this;
-  var playerLayer = game.createLayer("players");
+  var options = options || {};
+  var playerLayer = game.createLayer("player_" + new Date().getTime());
 
   this.entitiesCollected = {};
   this.countCollector = 0;
@@ -22,9 +23,9 @@ var Bee = function(game) {
   };
 
   this.player = new PixelJS.Player();
+  this.player.serverPlayer = options.serverPlayer;
   this.player.addToLayer(playerLayer);
-
-  this.player.pos = { x: 200, y: 300 };
+  this.player.pos = { x: 400, y: 300 };
   //this.player.allowDiagonalMovement = true; //Fuck ups the sprite animation
   this.player.size = { width: 50, height: 50 };
   this.player.velocity = { x: 700, y: 400 };
@@ -117,7 +118,7 @@ Bee.prototype.initLife = function(game) {
   var self = this;
   self.player.life = 5;
   self.lifes = [];
-  var lifeLayer = game.createLayer("life");
+  var lifeLayer = game.createLayer("life" + new Date().getTime());
   for(var i = 0; i < self.player.life; i++) {
     var lifeEntity = lifeLayer.createEntity();
     lifeEntity.size = { width: 50, height: 50 };

@@ -2,6 +2,7 @@
 
 var PixelJS = require('./vendors/pixel.js');
 var Bee = require('./bee.js');
+var serverPlayer = require('./server_player.js');
 var Hive = require('./hive.js');
 var Config = require('./config.js');
 var CollectableElement = require('./collectable_element.js');
@@ -26,6 +27,7 @@ Doodle.prototype.initialize = function() {
 
   this.collectablesController = new CollectablesController(this.game);
   this.beePlayer = new Bee(this.game);
+  this.serverBeePlayer = new Bee(this.game, {serverPlayer:true});
   this.score = new Score(this.game);
 
   this.soundManager = new SoundManager(this.game);
