@@ -1,6 +1,6 @@
 "use strict";
 
-var CONTSTANTS = {
+var CONSTANTS = {
 	HIVE: {
 		TYPE: 'hive'
 	},
