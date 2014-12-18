@@ -14,8 +14,8 @@ var Hive = function(game) {
   });
 
   var hiveCollector = hiveLayer.createEntity();
-  hiveCollector.pos = { x: 715, y: 180 };
-  hiveCollector.size = { width: 50, height: 50 };
+  hiveCollector.pos = { x: 715, y: 290 };
+  hiveCollector.size = { width: 70, height: 70 };
 
   hiveCollector.asset = new PixelJS.Sprite();
   

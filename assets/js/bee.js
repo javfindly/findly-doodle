@@ -38,8 +38,8 @@ var Bee = function(game) {
 Bee.prototype.update = function() {
   this.player.canMoveDown = (this.player.pos.y + this.player.size.height) < Config.game.height - 20;
   this.player.canMoveUp = this.player.pos.y > 10;
-  this.player.canMoveLeft = this.player.pos.x > 100;
-  this.player.canMoveRight = (this.player.pos.x + this.player.size.width) < Config.game.width - 20;
+  this.player.canMoveLeft = this.player.pos.x > 10;
+  this.player.canMoveRight = (this.player.pos.x + this.player.size.width) < Config.game.width - 10;
 }
 
 module.exports = Bee;
