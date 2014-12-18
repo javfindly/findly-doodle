@@ -1,6 +1,5 @@
 "use strict";
 
-
 var PixelJS = require('./vendors/pixel.js');
 var Bee = require('./bee.js');
 var Hive = require('./hive.js');

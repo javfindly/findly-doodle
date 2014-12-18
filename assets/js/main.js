@@ -8,6 +8,6 @@ var PixelJS = require('./vendors/pixel.js');
 PixelJS.assetPath = "assets";
 
 $(document).ready(function () {
-  var doodle = new Doodle();
-  doodle.start();
+  window.doodle = new Doodle();
+  window.doodle.start();
 });

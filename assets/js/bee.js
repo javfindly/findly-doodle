@@ -4,6 +4,8 @@
 var PixelJS = require('./vendors/pixel.js');
 var CollectableElement = require('./collectable_element.js');
 var Config = require('./config.js');
+var CONSTANTS = require('./constants.js');
+var CollectablesController = require('./collectables_controller.js');
 
 var Bee = function(game) {
   var playerLayer = game.createLayer("players");
@@ -22,15 +24,19 @@ var Bee = function(game) {
     defaultFrame: 0
   });
 
-  this.player.onCollide = function (entity) {
+  this.player.onCollide(function (entity) {
     collideCandidate(entity);
-  };
+  });
 
   playerLayer.registerCollidable(this.player);
+  var self = this;
 
   function collideCandidate(entity) {
-    if(entity.type == CollectableElement.CONSTANTS.TYPE) {
-      //entity.addToLayer(playerLayer);
+    if(entity.type == CONSTANTS.COLLECTABLE.TYPE) {
+      var collectableItem = window.doodle.collectablesController.getItem(entity.id);
+      if(collectableItem) {
+        collectableItem.attachToBee(self.player);
+      }
     }
   }
 };
