@@ -84,6 +84,7 @@ Bee.prototype.drop = function (entity) {
   var thisBee = this;
   _.each(this.entitiesCollected, function (item) {
     item.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
+    window.doodle.soundManager.play(CONSTANTS.SOUNDS.DEPOSIT);
     thisBee.removeEntity(item.collectableEntity);
   });
 };
