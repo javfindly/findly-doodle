@@ -7,6 +7,7 @@ var Config = require('./config.js');
 var CollectableElement = require('./collectable_element.js');
 var Background = require('./background/background.js');
 var CollectablesController = require('./collectables_controller.js');
+var Score = require('./score.js');
 
 
 var Doodle = function() {
@@ -23,6 +24,7 @@ Doodle.prototype.initialize = function() {
   this.hive = new Hive(this.game);
   this.collectablesController = new CollectablesController(this.game);
   this.beePlayer = new Bee(this.game);
+  this.score = new Score(this.game);
 
 }
 
@@ -33,6 +35,7 @@ Doodle.prototype.start = function() {
     thisDoodle.collectablesController.updateCollectables();
     thisDoodle.beePlayer.update();
     thisDoodle.background.update();
+    // thisDoodle.score.updateScore(3); //example how to increase the score
   });
 }
 

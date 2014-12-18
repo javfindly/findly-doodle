@@ -17,6 +17,7 @@ var Background = function (game) {
 
 Background.prototype.initialize = function () {
   this.layer = this.game.createLayer('background');
+
 };
 
 Background.prototype.render = function () {
