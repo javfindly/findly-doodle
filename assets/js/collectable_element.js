@@ -2,6 +2,10 @@
 
 var PixelJS = require('./vendors/pixel.js');
 
+var CONSTANTS = {
+  TYPE: 'candidate'
+}
+
 var CollectableElement = function (game) {
   this.layer = game.createLayer("collectables");
   this.collectableEntity = this.layer.createEntity();
@@ -12,7 +16,11 @@ var CollectableElement = function (game) {
   this.collectableEntity.asset.prepare({
     name: 'cv_test.png'
   });
+  this.collectableEntity.id = "collectable_" + (new Date().getTime());
+  this.collectableEntity.type = CONSTANTS.TYPE;
 };
+
+CollectableElement.prototype.CONSTANTS = CONSTANTS;
 
 CollectableElement.prototype.drop = function() {
   this.collectableEntity.moveDown();

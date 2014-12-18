@@ -4,6 +4,7 @@
 var PixelJS = require('./vendors/pixel.js');
 var Bee = require('./bee.js');
 var Hive = require('./hive.js');
+var Config = require('./config.js');
 var CollectableElement = require('./collectable_element.js');
 
 var Doodle = function() {
@@ -13,11 +14,7 @@ var Doodle = function() {
 Doodle.prototype.initialize = function() {
   console.log('Initializing Doodle...');
   this.game = new PixelJS.Engine();
-  this.game.init({
-    container: 'game_container',
-    width: 800,
-    height: 600
-  });
+  this.game.init(Config.game);
   this.hive = new Hive(this.game);
   this.beePlayer = new Bee(this.game);  
   this.collectableElement = new CollectableElement(this.game);
@@ -28,6 +25,7 @@ Doodle.prototype.start = function() {
   var thisDoodle = this;
   this.game.loadAndRun(function (elapsedTime, dt) {
     thisDoodle.collectableElement.drop();
+    thisDoodle.beePlayer.update();
   });
 }
 
