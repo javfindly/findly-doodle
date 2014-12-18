@@ -2,9 +2,7 @@
 
 var PixelJS = require('./vendors/pixel.js');
 
-var CONSTANTS = {
-  TYPE: 'candidate'
-}
+var CONSTANTS = require('./constants.js');
 
 var CollectableElement = function (layer, velocity) {
   this.collectableEntity = layer.createEntity();
@@ -21,13 +19,44 @@ var CollectableElement = function (layer, velocity) {
     rows: 4
   });
   this.collectableEntity.id = "collectable_" + (new Date().getTime());
-  this.collectableEntity.type = CONSTANTS.TYPE;
+  this.collectableEntity.type = CONSTANTS.COLLECTABLE.TYPE;
+  this.collectableEntity.status = CONSTANTS.COLLECTABLE.STATUS.FALLING;
+  layer.registerCollidable(this.collectableEntity);
 };
 
 CollectableElement.prototype.CONSTANTS = CONSTANTS;
 
-CollectableElement.prototype.drop = function() {
-  this.collectableEntity.moveDown();
+CollectableElement.prototype.update = function(velocity) {
+  var entity = this.collectableEntity;
+  switch(entity.status) {
+    case CONSTANTS.COLLECTABLE.STATUS.FALLING:
+      if (entity.pos.y > 600) {
+        entity.dispose();
+        window.doodle.collectablesController.removeItem(entity.id);
+      }
+      entity.moveDown();
+      break;
+    case CONSTANTS.COLLECTABLE.STATUS.PICKED_UP:
+      entity.moveTo(entity.attached.pos.x,entity.attached.pos.y + entity.attached.size.height - 10);
+      break;
+    case CONSTANTS.COLLECTABLE.STATUS.COLLECTED:
+
+      this.changeStatus( CONSTANTS.COLLECTABLE.STATUS.DISPOSED );
+      entity.fadeTo(0,500,function(){
+        entity.dispose();
+      })
+      window.doodle.collectablesController.removeItem(entity.id);
+      break;
+  }
 };
+
+CollectableElement.prototype.changeStatus = function(newStatus) {
+  this.collectableEntity.status = newStatus;
+}
+
+CollectableElement.prototype.attachToBee = function(bee) {
+  this.changeStatus(CONSTANTS.COLLECTABLE.STATUS.PICKED_UP);
+  this.collectableEntity.attached = bee;
+}
 
 module.exports = CollectableElement;

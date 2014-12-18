@@ -18,7 +18,7 @@ var CollectablesController = function (game) {
 
 CollectablesController.prototype.dropCollectables = function () {
   _.each(this.itemMap, function(entity, key){
-    entity.drop();
+    entity.update();
   });
 };
 
@@ -34,11 +34,15 @@ CollectablesController.prototype.createItem = function () {
   }
   var velocity = {x:0, y: this.initialVelocity};
   var item = new CollectableElement(this.elementsLayer, velocity);
-  this.itemMap[item.collectableEntity.id] =  item;
+  this.itemMap[item.collectableEntity.id] = item;
+
+  console.log(Object.keys(this.itemMap).length);
 };
 
-CollectablesController.prototype.removeItem = function () {
-  // remove from itemMap
+CollectablesController.prototype.removeItem = function (id) {
+  if(this.itemMap[id]) {
+    delete this.itemMap[id];
+  }
 };
 
 CollectablesController.prototype.updateCollectables = function () {
