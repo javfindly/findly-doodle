@@ -1,6 +1,7 @@
 "use strict";
 
 var PixelJS = require('./vendors/pixel.js');
+var CollectableElement = require('./collectable_element.js');
 
 var Hive = function(game) {
   var hiveLayer = game.createLayer("hive");
@@ -17,23 +18,19 @@ var Hive = function(game) {
   hiveCollector.size = { width: 50, height: 50 };
 
   hiveCollector.asset = new PixelJS.Sprite();
-  /*
-    // Print a black box in the position of the collector to see it and debug
-    hiveCollector.asset.prepare({
-    name: 'blackbox.png'
-  });
-  */
-
-
+  
   hiveCollector.onCollide = function (entity) {
     collideCandidate(entity);
   };
 
-  //playerLayer.registerCollidable(player);
+  hiveLayer.registerCollidable(hiveCollector);
 
   function collideCandidate(entity) {
-    if(entity.type == 'candidate') {
-      entity.dispose();
+    if(entity.type == CollectableElement.CONSTANTS.TYPE) {
+      entity.addToLayer(hiveLayer);
+      entity.fadeTo(0,500,function(){
+        entity.dispose();
+      })
     }
   }
 }
