@@ -3,6 +3,7 @@
 var PixelJS = require('./vendors/pixel.js');
 
 var CONSTANTS = require('./constants.js');
+var config = require('./config.js');
 
 var CollectableElement = function (layer, velocity) {
   this.collectableEntity = layer.createEntity();
@@ -26,18 +27,18 @@ var CollectableElement = function (layer, velocity) {
 
 CollectableElement.prototype.CONSTANTS = CONSTANTS;
 
-CollectableElement.prototype.update = function(velocity) {
+CollectableElement.prototype.update = function() {
   var entity = this.collectableEntity;
   switch(entity.status) {
     case CONSTANTS.COLLECTABLE.STATUS.FALLING:
-      if (entity.pos.y > 600) {
+      if (entity.pos.y > config.height) {
         entity.dispose();
         window.doodle.collectablesController.removeItem(entity.id);
       }
       entity.moveDown();
       break;
     case CONSTANTS.COLLECTABLE.STATUS.PICKED_UP:
-      entity.moveTo(entity.attached.pos.x,entity.attached.pos.y + entity.attached.size.height - 10);
+      entity.moveTo(entity.attached.pos.x, entity.attached.pos.y + entity.attached.size.height - 10, 100);
       break;
     case CONSTANTS.COLLECTABLE.STATUS.COLLECTED:
 

@@ -18,7 +18,7 @@ var CollectablesController = function (game) {
 };
 
 CollectablesController.prototype.dropCollectables = function () {
-  _.each(this.itemMap, function(entity, key){
+  _.each(this.itemMap, function(entity){
     entity.update();
   });
 };
@@ -36,7 +36,6 @@ CollectablesController.prototype.createItem = function () {
   var item = new CollectableElement(this.elementsLayer, velocity);
   this.itemMap[item.collectableEntity.id] = item;
   window.doodle.soundManager.play(CONSTANTS.SOUNDS.DROP);
-
 };
 
 CollectablesController.prototype.removeItem = function (id) {

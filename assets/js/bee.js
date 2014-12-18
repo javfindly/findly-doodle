@@ -6,11 +6,21 @@ var CollectableElement = require('./collectable_element.js');
 var Config = require('./config.js');
 var $ = require('jquery');
 var CONSTANTS = require('./constants.js');
+var _ = require('lodash');
 var CollectablesController = require('./collectables_controller.js');
 
 var Bee = function(game) {
-  var playerLayer = game.createLayer("players");
+  _.bindAll(this, 'whenCollision', 'collect', 'drop');
   var self = this;
+  var playerLayer = game.createLayer("players");
+
+  this.entitiesCollected = {};
+  this.countCollector = 0;
+  this.history = {
+    count: 0,
+    collectedIds: []
+  };
+
   this.player = new PixelJS.Player();
   this.player.addToLayer(playerLayer);
 
@@ -30,7 +40,7 @@ var Bee = function(game) {
   this.player.life = 5;
 
   this.player.onCollide(function (entity) {
-    collideCandidate(entity);
+    self.whenCollision(entity);
   });
 
   var lifeLayer = game.createLayer("life");
@@ -38,17 +48,62 @@ var Bee = function(game) {
   $(document).bind( "game.lifeLost", this.lifeLost);
 
   playerLayer.registerCollidable(this.player);
-  var self = this;
+};
 
-  function collideCandidate(entity) {
-    if(entity.type == CONSTANTS.COLLECTABLE.TYPE) {
-      var collectableItem = window.doodle.collectablesController.getItem(entity.id);
-      if(collectableItem && collectableItem.collectableEntity && collectableItem.collectableEntity.status == CONSTANTS.COLLECTABLE.STATUS.FALLING) {
-        collectableItem.attachToBee(self.player);
+
+Bee.prototype.whenCollision = function (entity) {
+  switch(entity.type) {
+    case CONSTANTS.COLLECTABLE.TYPE:
+      if (!_.contains(this.history.collectedIds, entity.id)) {
+        this.collect(entity);
       }
-    }
+      break;
+    case CONSTANTS.HIVE.TYPE:
+      if (Object.keys(this.entitiesCollected).length > 0) {
+        this.drop(entity);
+      }
+      break;
+  }
+}
+
+Bee.prototype.collect = function (entity) {
+  if (this.history.count >= Config.game.max_collectable) {
+    return;
+  }
+
+  if (this['_' + entity.type + 'Collected'] instanceof Function) {
+    this['_' + entity.type + 'Collected'](entity);
   }
 };
+
+Bee.prototype._candidateCollected = function (entity) {
+  this.addEntity(entity);
+  var collectableItem = window.doodle.collectablesController.getItem(entity.id);
+  if(collectableItem) {
+    collectableItem.attachToBee(this.player);
+  }
+};
+
+Bee.prototype.drop = function (entity) {
+  var thisBee = this;
+  _.each(this.entitiesCollected, function (item) {
+    item.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
+    thisBee.removeEntity(item.collectableEntity);
+  });
+};
+
+Bee.prototype.addEntity = function (entity) {
+  this.entitiesCollected[entity.id] = window.doodle.collectablesController.getItem(entity.id);
+  this.history.collectedIds.push(entity.id);
+  this.history.count++;
+};
+
+Bee.prototype.removeEntity = function (entity) {
+  delete this.entitiesCollected[entity.id];
+  this.history.count--;
+}
+
+
 
 Bee.prototype.update = function() {
   this.player.canMoveDown = (this.player.pos.y + this.player.size.height) < Config.game.height - 20;
