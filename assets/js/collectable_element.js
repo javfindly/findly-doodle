@@ -12,7 +12,7 @@ var CollectableElement = function (layer) {
   this.collectableEntity.size = { width: 12, height: 12 };
   this.collectableEntity.velocity = { x: 200, y: 100 };
   this.collectableEntity.asset = new PixelJS.Sprite();
-  this.collectableEntity.asset.prepare({
+  this.collectableEntity.asset.load({
     name: 'cv_test.png'
   });
   this.collectableEntity.id = "collectable_" + (new Date().getTime());
