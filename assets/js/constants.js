@@ -10,6 +10,11 @@ var CONTSTANTS = {
 		    LOSTED: 'LOSTED',
 		    DISPOSED: 'DISPOSED',
 	  	}
+	},
+	SOUNDS = {
+		COLLECT: 'collectItem',
+		DEPOSIT: 'depositItem',
+		LOSE: 'loseItem'
 	}
 }
 

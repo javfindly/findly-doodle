@@ -8,7 +8,8 @@ var CollectableElement = require('./collectable_element.js');
 var Background = require('./background/background.js');
 var CollectablesController = require('./collectables_controller.js');
 var Score = require('./score.js');
-
+var SoundManager = require('./sound_manager.js');
+var CONSTANTS = require('./constants.js');
 
 var Doodle = function() {
   this.initialize();
@@ -22,10 +23,14 @@ Doodle.prototype.initialize = function() {
   this.background = new Background(this.game);
   this.background.render();
   this.hive = new Hive(this.game);
+
   this.collectablesController = new CollectablesController(this.game);
   this.beePlayer = new Bee(this.game);
   this.score = new Score(this.game);
 
+  this.soundManager = new SoundManager(this.game);
+
+  this.soundManager.play(CONSTANTS.SOUNDS.COLLECT);
 }
 
 Doodle.prototype.start = function() {
