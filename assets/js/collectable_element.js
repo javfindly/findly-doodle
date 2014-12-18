@@ -24,28 +24,37 @@ var CollectableElement = function (layer, velocity) {
 CollectableElement.prototype.CONSTANTS = CONSTANTS;
 
 CollectableElement.prototype.update = function() {
-  var entity = this.collectableEntity;
-  switch(entity.status) {
-    case CONSTANTS.COLLECTABLE.STATUS.FALLING:
-      if (entity.pos.y > config.game.height) {
-        entity.dispose();
-        window.doodle.collectablesController.removeItem(entity.id);
-        $(document).trigger("game.lifeLost");
-      }
-      entity.moveDown();
-      break;
-    case CONSTANTS.COLLECTABLE.STATUS.PICKED_UP:
-      entity.moveTo(entity.attached.pos.x, entity.attached.pos.y + entity.attached.size.height - 10, 100);
-      break;
-    case CONSTANTS.COLLECTABLE.STATUS.COLLECTED:
+  var actions = {};
+  actions[CONSTANTS.COLLECTABLE.STATUS.FALLING] = this.fall;
+  actions[CONSTANTS.COLLECTABLE.STATUS.PICKED_UP] = this.pickUp;
+  actions[CONSTANTS.COLLECTABLE.STATUS.COLLECTED] = this.collect;
 
-      this.changeStatus( CONSTANTS.COLLECTABLE.STATUS.DISPOSED );
-      entity.fadeTo(0,500,function(){
-        entity.dispose();
-      })
-      window.doodle.collectablesController.removeItem(entity.id);
-      break;
+  actions[this.collectableEntity.status](this.collectableEntity);
+};
+
+CollectableElement.prototype.fall = function (entity) {
+  if (entity.pos.y > config.game.height) {
+    entity.dispose();
+    window.doodle.collectablesController.removeItem(entity.id);
+    $(document).trigger("game.lifeLost");
   }
+  entity.moveDown();
+};
+
+CollectableElement.prototype.pickUp = function (entity) {
+  entity.moveTo(entity.attached.pos.x, entity.attached.pos.y + entity.attached.size.height - 10, 100);
+};
+
+CollectableElement.prototype.collect = function (entity) {
+  this.changeStatus( CONSTANTS.COLLECTABLE.STATUS.DISPOSED );
+  entity.fadeTo(0,500,function(){
+    entity.dispose();
+  })
+  window.doodle.collectablesController.removeItem(entity.id);
+};
+
+CollectableElement.prototype.dispose = function () {
+  this.collectableEntity.dispose();
 };
 
 CollectableElement.prototype.changeStatus = function(newStatus) {
