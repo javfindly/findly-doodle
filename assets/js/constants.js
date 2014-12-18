@@ -1,6 +1,6 @@
 "use strict";
 
-var CONTSTANTS = {
+var CONSTANTS = {
 	COLLECTABLE: {
 		TYPE: 'candidate',
 	  	STATUS: {
@@ -11,11 +11,12 @@ var CONTSTANTS = {
 		    DISPOSED: 'DISPOSED',
 	  	}
 	},
-	SOUNDS = {
+	SOUNDS: {
 		COLLECT: 'collectItem',
 		DEPOSIT: 'depositItem',
-		LOSE: 'loseItem'
+		LOSE: 'loseItem',
+		DROP: 'dropItem'
 	}
 }
 
-module.exports = CONTSTANTS;
+module.exports = CONSTANTS;

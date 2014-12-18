@@ -3,6 +3,7 @@
 var _ = require('lodash');
 // var PixelJS = require('./vendors/pixel.js');
 var CollectableElement = require('./collectable_element.js');
+var CONSTANTS = require('./constants.js');
 
 var CollectablesController = function (game) {
   this.elementsLayer = game.createLayer("collectables");
@@ -34,6 +35,7 @@ CollectablesController.prototype.createItem = function () {
   var velocity = {x:0, y: this.initialVelocity};
   var item = new CollectableElement(this.elementsLayer, velocity);
   this.itemMap[item.collectableEntity.id] = item;
+  window.doodle.soundManager.play(CONSTANTS.SOUNDS.DROP);
 
   console.log(Object.keys(this.itemMap).length);
 };

@@ -32,6 +32,7 @@ var Hive = function(game) {
       var collectable = window.doodle.collectablesController.getItem(entity.id);
       if(collectable && collectable.status == CONSTANTS.COLLECTABLE.PICKED_UP) {
         collectable.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
+        window.doodle.soundManager.play(CONSTANTS.SOUNDS.DEPOSIT);
       }
     }
   }

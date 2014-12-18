@@ -34,7 +34,7 @@ var Bee = function(game) {
   function collideCandidate(entity) {
     if(entity.type == CONSTANTS.COLLECTABLE.TYPE) {
       var collectableItem = window.doodle.collectablesController.getItem(entity.id);
-      if(collectableItem) {
+      if(collectableItem && collectableItem.collectableEntity && collectableItem.collectableEntity.status == CONSTANTS.COLLECTABLE.STATUS.FALLING) {
         collectableItem.attachToBee(self.player);
       }
     }

@@ -29,8 +29,6 @@ Doodle.prototype.initialize = function() {
   this.score = new Score(this.game);
 
   this.soundManager = new SoundManager(this.game);
-
-  this.soundManager.play(CONSTANTS.SOUNDS.COLLECT);
 }
 
 Doodle.prototype.start = function() {
