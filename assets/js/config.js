@@ -3,8 +3,8 @@
 var Config = {
 	game : {
     	container: 'game_container',
-    	width: 800,
-    	height: 600,
+    	width: 1024,
+    	height: 720,
 			max_collectable: 2
   	}
 }
