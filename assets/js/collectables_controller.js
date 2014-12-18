@@ -57,9 +57,6 @@ CollectablesController.prototype.createItem = function () {
             status: CONSTANTS.COLLECTABLE.STATUS.FALLING
             };
   var index = Math.floor(Math.random() * this.notRandomTypes.length);
-  console.log(this.notRandomTypes);
-  console.log(index);
-
   _.extend(options, this.notRandomTypes[index]);
   var collectableElement = new CollectableElement(options);
   collectableElement.addTo(this.elementsLayer);
