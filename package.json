@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify assets/js/main.js -o bundle.js",
+    "build": "browserify ./assets/js/main.js -o bundle.js",
     "prestart": "npm install",
     "start": "http-server . -p 8000"
   },
@@ -15,7 +15,8 @@
     "jquery": "^2.1.2",
     "lodash": "^2.4.1",
     "pixi": "^0.2.1",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "express": "4.x"
   },
   "devDependencies": {
     "gulp": "^3.8.10",

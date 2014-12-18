@@ -37,7 +37,6 @@ CollectablesController.prototype.createItem = function () {
   this.itemMap[item.collectableEntity.id] = item;
   window.doodle.soundManager.play(CONSTANTS.SOUNDS.DROP);
 
-  console.log(Object.keys(this.itemMap).length);
 };
 
 CollectablesController.prototype.removeItem = function (id) {
