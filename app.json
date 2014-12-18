@@ -1,0 +1,6 @@
+{
+  "name": "Findly Doodle",
+  "description": "A Findly Doodle game",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "express", "findly", "doodle"]
+}

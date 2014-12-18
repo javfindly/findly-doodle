@@ -13,6 +13,7 @@ var Score = function(game) {
   this.entity.asset.load({
     name: 'honeycomb.png'
   });
+  this.entity.opacity = 0.5;
   this.scoreLayer = game.createLayer("score");
   this.scoreLayer.static = true;
   this.currentScore = 0;
@@ -21,7 +22,7 @@ var Score = function(game) {
     this.currentScore,
     60,
     75,
-    '40pt "Trebuchet MS", Helvetica, sans-serif',
+    '30pt "Trebuchet MS", Helvetica, sans-serif',
     '#F22',
     'center'
   );
@@ -34,8 +35,8 @@ Score.prototype.updateScore = function(points) {
     this.currentScore,
     60,
     75,
-    '40pt "Trebuchet MS", Helvetica, sans-serif',
-    '#F22',
+    '30pt "Trebuchet MS", Helvetica, sans-serif',
+    '#F22F',
     'center'
   );
 }
