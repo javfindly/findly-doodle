@@ -3,6 +3,24 @@
 <head>
   <title>pixi.js example 1</title>
   <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+  <!--script src="http://notifications-findly.rhcloud.com/socket.io/socket.io.js"></script--> 
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script> 
+  <script type="text/javascript">
+  //io = io.connect('http://notifications-findly.rhcloud.com');
+  io = io.connect('http://localhost:3000');
+  // Listen for the talk event.
+  // Emit ready event.
+  io.emit('ready', {
+	clientName: 'doodle',
+	userId: '1234'
+  });
+
+  io.on('sendkeys', function(json) {
+  	console.log(json);
+	var event = new CustomEvent(json.message.data.eventType, {"detail": json.message.data.eventData });
+	document.dispatchEvent(event); 
+  })  
+  </script>
 </head>
 <body>
   <div id="game_container" style="position: relative; width: 800px; height: 600px; margin: 0 auto;">

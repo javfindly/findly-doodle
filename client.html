@@ -1,8 +1,12 @@
 <html>
 	<head>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<!--script src="http://notifications-findly.rhcloud.com/socket.io/socket.io.js"></script--> 
+		<script src="http://localhost:3000/socket.io/socket.io.js"></script> 
 		<script type="text/javascript">
 		(function($) {
+			//io = io.connect('http://notifications-findly.rhcloud.com');
+			io = io.connect("http://localhost:3000");
 	        var message = {
 			  	"message": {
 			    	"status":"true",
@@ -25,22 +29,12 @@
 				send(message);
 		    }, false);
 			function send(eventData) {
-				var url = '//notifications-findly.rhcloud.com/doodle/notification/541/notify';
-				$.ajax({
-					type: 'POST',
-					url: url,
-					async: false,
-					data: JSON.stringify(eventData),
-					dataType: 'json',
-					contentType: "application/json",
-					//dataType: 'jsonp',
-					success: function(json) {
-						console.log(JSON.stringify(json));
-					},
-					error: function(e) {
-						console.log(e.message);
-					}
-				});
+				// Emit ready event.
+				io.emit('sendkeys', {
+					clientName: 'doodle',
+					userId: '1234',
+					data: eventData
+				}); 
 			}
 			
 		})(jQuery);

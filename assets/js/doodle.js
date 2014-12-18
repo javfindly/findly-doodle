@@ -2,7 +2,7 @@
 
 var PixelJS = require('./vendors/pixel.js');
 var Bee = require('./bee.js');
-var serverPlayer = require('./server_player.js');
+//var serverPlayer = require('./server_player.js');
 var Hive = require('./hive.js');
 var Config = require('./config.js');
 var CollectableElement = require('./collectable_element.js');
