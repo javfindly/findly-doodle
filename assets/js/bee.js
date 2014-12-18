@@ -36,7 +36,7 @@ var Bee = function(game) {
     speed: 100,
     defaultFrame: 1
   });
-  
+
   this.player.onCollide(function (entity) {
   self.whenCollision(entity);
 
@@ -69,7 +69,7 @@ Bee.prototype.collect = function (entity) {
 
   if (this['_' + entity.type + 'Collected'] instanceof Function) {
     this['_' + entity.type + 'Collected'](entity);
-  }  
+  }
 };
 
 Bee.prototype._candidateCollected = function (entity) {
@@ -82,11 +82,14 @@ Bee.prototype._candidateCollected = function (entity) {
 
 Bee.prototype.drop = function (entity) {
   var thisBee = this;
+  var pointCollected = 0;
   _.each(this.entitiesCollected, function (item) {
     item.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
     window.doodle.soundManager.play(CONSTANTS.SOUNDS.DEPOSIT);
+    pointCollected += item.collectableEntity.points;
     thisBee.removeEntity(item.collectableEntity);
   });
+  window.doodle.score.updateScore(pointCollected);
 };
 
 Bee.prototype.addEntity = function (entity) {

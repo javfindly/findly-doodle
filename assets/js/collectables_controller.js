@@ -6,15 +6,20 @@ var CollectableElement = require('./collectable_element.js');
 var CONSTANTS = require('./constants.js');
 
 var CollectablesController = function (game) {
-  this.elementsLayer = game.createLayer("collectables");
-  this.previousTime = new Date().getTime();
+  if (!game) {
+    throw new Error('Game argument is required.');
+  }
+  this.game = game;
   this.itemMap = {};
-  //starting the first collectable element
-  this.initialVelocity = 100;
-  var velocity = {x:0, y: this.initialVelocity};
-  var collectableElement = new CollectableElement(this.elementsLayer, velocity);
-  this.itemMap[collectableElement.collectableEntity.id] = collectableElement;
+  this.initialize();
+};
 
+CollectablesController.prototype.initialize = function () {
+  this.elementsLayer = this.game.createLayer("collectables");
+  this.previousTime = new Date().getTime();
+  this.initialVelocity = 100;
+  var collectableElement = new CollectableElement(this.elementsLayer, {x:0, y: this.initialVelocity});
+  this.itemMap[collectableElement.collectableEntity.id] = collectableElement;
 };
 
 CollectablesController.prototype.dropCollectables = function () {
