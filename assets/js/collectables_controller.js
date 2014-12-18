@@ -18,7 +18,7 @@ var CollectablesController = function (game) {
 
 CollectablesController.prototype.dropCollectables = function () {
   _.each(this.itemMap, function(entity, key){
-    entity.drop();
+    entity.update();
   });
 };
 
@@ -37,8 +37,10 @@ CollectablesController.prototype.createItem = function () {
   this.itemMap[item.collectableEntity.id] =  item;
 };
 
-CollectablesController.prototype.removeItem = function () {
-  // remove from itemMap
+CollectablesController.prototype.removeItem = function (id) {
+  if(this.itemMap[id]) {
+    delete this.itemMap[id];
+  }
 };
 
 CollectablesController.prototype.updateCollectables = function () {
