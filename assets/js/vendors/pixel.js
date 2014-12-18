@@ -1279,6 +1279,10 @@ PixelJS.Player.prototype.addToLayer = function (layer) {
     this.layer = layer;
 
     this.layer.engine.on('keydown', function (keyCode) {
+        if (window.freeze === true) {
+          return;
+        }
+        
         switch (keyCode) {
             case PixelJS.Keys.Left:
                 self.direction |= PixelJS.Directions.Left;

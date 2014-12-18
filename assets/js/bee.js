@@ -8,10 +8,12 @@ var $ = require('jquery');
 var CONSTANTS = require('./constants.js');
 var _ = require('lodash');
 var CollectablesController = require('./collectables_controller.js');
+var LifeManager = require('./life.js');
 
 var Bee = function(game) {
-  _.bindAll(this, 'whenCollision', 'collect', 'drop');
+  _.bindAll(this, 'whenCollision', 'collect', 'drop', 'restart');
   var self = this;
+  this.game = game;
   var playerLayer = game.createLayer("players");
 
   this.entitiesCollected = {};
@@ -37,10 +39,7 @@ var Bee = function(game) {
     defaultFrame: 1
   });
 
-  this.player.onCollide(function (entity) {
-  self.whenCollision(entity);
-
-  });
+  this.player.onCollide(this.whenCollision);
 
   playerLayer.registerCollidable(this.player);
   this.initLife(game);
@@ -60,7 +59,7 @@ Bee.prototype.whenCollision = function (entity) {
       }
       break;
   }
-}
+};
 
 Bee.prototype.collect = function (entity) {
   if (this.history.count >= Config.game.max_collectable) {
@@ -84,6 +83,9 @@ Bee.prototype.drop = function (entity) {
   var thisBee = this;
   var pointCollected = 0;
   _.each(this.entitiesCollected, function (item) {
+    if (!item) {
+      return;
+    }
     item.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
     window.doodle.soundManager.play(CONSTANTS.SOUNDS.DEPOSIT);
     pointCollected += item.entity.points;
@@ -93,6 +95,9 @@ Bee.prototype.drop = function (entity) {
 };
 
 Bee.prototype.addEntity = function (entity) {
+  if (!window.doodle.collectablesController.getItem(entity.id)) {
+    return;
+  }
   this.entitiesCollected[entity.id] = window.doodle.collectablesController.getItem(entity.id);
   this.history.collectedIds.push(entity.id);
   this.history.count++;
@@ -101,10 +106,17 @@ Bee.prototype.addEntity = function (entity) {
 Bee.prototype.removeEntity = function (entity) {
   delete this.entitiesCollected[entity.id];
   this.history.count--;
-}
+};
 
 Bee.prototype.update = function() {
-  if(this.player.life > 0) {
+  if (window.freeze === true) {
+    this.player.velocity = { x: 0, y: 0 };
+    return;
+  }
+
+  this.player.velocity = { x: 700, y: 400 };
+
+  if(this.player.lifeManager.counter > 0) {
     this.player.canMoveDown = (this.player.pos.y + this.player.size.height) < Config.game.height - 20;
     this.player.canMoveUp = this.player.pos.y > 10;
     this.player.canMoveLeft = this.player.pos.x > 10;
@@ -115,38 +127,25 @@ Bee.prototype.update = function() {
     this.player.canMoveLeft = false;
     this.player.canMoveRight = false;
   }
-}
+};
 
 Bee.prototype.initLife = function(game) {
-  var self = this;
-  self.player.life = 5;
-  self.lifes = [];
-  var lifeLayer = game.createLayer("life");
-  for(var i = 0; i < self.player.life; i++) {
-    var lifeEntity = lifeLayer.createEntity();
-    lifeEntity.size = { width: 50, height: 50 };
-    var xOffset = Config.game.width - (lifeEntity.size.width + 10) * (i+1);
-    lifeEntity.pos = { x: xOffset , y: 20 };
-    lifeEntity.asset = new PixelJS.Sprite();
-    lifeEntity.asset.prepare({
-      name: 'life.png'
-    });
-    self.lifes.push(lifeEntity);
-  }
-  $(document).bind("game.lifeLost", function(e) {
-    self.lifeLost(self,e)
-  });
-}
+  this.player.lifeManager = new LifeManager(game);
+  this.player.lifeManager.render();
+};
 
-Bee.prototype.lifeLost = function(self,e) {
-  self.player.life--;
-  if(self.player.life <= 0) {
-    $(document).trigger("game.lost");
-  }
-  var lifeEntity = self.lifes.shift();
-  if(lifeEntity) {
-    lifeEntity.dispose();
-  }
-}
+Bee.prototype.restart = function () {
+  this.player.lifeManager.restart();
+  _.each(this.entitiesCollected, function (entity) {
+    entity.dispose();
+    entity = null;
+  });
+  this.entitiesCollected = {};
+  this.countCollector = 0;
+  this.history = {
+    count: 0,
+    collectedIds: []
+  };
+};
 
 module.exports = Bee;

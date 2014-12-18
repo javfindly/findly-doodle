@@ -33,6 +33,9 @@ Background.prototype.render = function () {
 };
 
 Background.prototype.update = function () {
+  if (window.freeze === true) {
+    return;
+  }
   this.entityCollection.clouds.forEach(function (cloud) {
     cloud.move();
   });
@@ -45,6 +48,5 @@ Background.prototype.generateClouds = function (number) {
     this.entityCollection.clouds.push(cloud.addTo(this.layer));
   }
 };
-
 
 module.exports = Background;

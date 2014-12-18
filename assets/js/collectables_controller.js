@@ -4,6 +4,7 @@ var _ = require('lodash');
 // var PixelJS = require('./vendors/pixel.js');
 var CollectableElement = require('./collectable_element.js');
 var CONSTANTS = require('./constants.js');
+var Config = require('./config.js');
 
 var CollectablesController = function (game) {
   if (!game) {
@@ -17,14 +18,11 @@ var CollectablesController = function (game) {
 CollectablesController.prototype.initialize = function () {
   this.elementsLayer = this.game.createLayer("collectables");
   this.previousTime = new Date().getTime();
-  this.initialVelocity = 100;
-
+  this.initialVelocity = Config.game.falling_objects_velocity;
   this.createItem();
 };
 
 CollectablesController.prototype.dropCollectables = function () {
-  console.log('dropping');
-  console.log(this.itemMap);
   _.each(this.itemMap, function(entity){
     entity.update();
   });
@@ -58,6 +56,10 @@ CollectablesController.prototype.removeItem = function (id) {
 };
 
 CollectablesController.prototype.updateCollectables = function () {
+  if (window.freeze === true) {
+    return;
+  }
+
   var time = new Date().getTime();
   this.dropCollectables();
   if ((time - this.previousTime) > 2000) {
@@ -69,6 +71,19 @@ CollectablesController.prototype.updateCollectables = function () {
 
 CollectablesController.prototype.itemMap = function () {
   return itemMap;
+};
+
+CollectablesController.prototype.restart = function () {
+  this.initialVelocity = Config.game.falling_objects_velocity;
+  this.resetMap();
+};
+
+CollectablesController.prototype.resetMap = function () {
+  _.each(this.itemMap, function (item) {
+    item.dispose();
+  });
+
+  this.itemMap = {};
 };
 
 module.exports = CollectablesController;

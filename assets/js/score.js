@@ -39,6 +39,11 @@ Score.prototype.updateScore = function(points) {
     '#F22',
     'center'
   );
-}
+};
+
+Score.prototype.restart = function () {
+  this.currentScore = 0;
+  this.updateScore(0);
+};
 
 module.exports = Score;

@@ -17,6 +17,10 @@ CollectableElement.prototype = Entity.prototype;
 CollectableElement.prototype.CONSTANTS = CONSTANTS;
 
 CollectableElement.prototype.update = function () {
+  if (window.freeze === true) {
+    return;
+  }
+
   var actions = {};
   actions[CONSTANTS.COLLECTABLE.STATUS.FALLING] = this.fall;
   actions[CONSTANTS.COLLECTABLE.STATUS.PICKED_UP] = this.pickUp;
@@ -56,5 +60,6 @@ CollectableElement.prototype.attachToBee = function(bee) {
   this.changeStatus(CONSTANTS.COLLECTABLE.STATUS.PICKED_UP);
   this.entity.attached = bee;
 }
+
 
 module.exports = CollectableElement;
