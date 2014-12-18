@@ -6,14 +6,13 @@ var CONSTANTS = {
   TYPE: 'candidate'
 }
 
-var CollectableElement = function (game) {
-  this.layer = game.createLayer("collectables");
-  this.collectableEntity = this.layer.createEntity();
-  this.collectableEntity.pos = { x: 400, y: 0 };
+var CollectableElement = function (layer) {
+  this.collectableEntity = layer.createEntity();
+  this.collectableEntity.pos = { x: Math.floor(Math.random() * 600) + 1, y: 0 };
   this.collectableEntity.size = { width: 12, height: 12 };
   this.collectableEntity.velocity = { x: 200, y: 100 };
   this.collectableEntity.asset = new PixelJS.Sprite();
-  this.collectableEntity.asset.prepare({
+  this.collectableEntity.asset.load({
     name: 'cv_test.png'
   });
   this.collectableEntity.id = "collectable_" + (new Date().getTime());
@@ -22,7 +21,8 @@ var CollectableElement = function (game) {
 
 CollectableElement.prototype.CONSTANTS = CONSTANTS;
 
-CollectableElement.prototype.drop = function() {
+CollectableElement.prototype.drop = function(velocity) {
+  // this.collectableEntity.velocity = velocity;
   this.collectableEntity.moveDown();
 };
 
