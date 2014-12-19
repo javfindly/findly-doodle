@@ -19,6 +19,11 @@ MainPage.prototype.start = function() {
 		self.share('twitter');
 	});
 
+	$(document).on("click", "#shareOnGoogle", function (evt) {
+		evt.preventDefault();
+		self.share('google');
+	});
+
 	$(document).on("click", "#restart", function (evt) {
 		evt.preventDefault();
 		self.restart();
@@ -70,6 +75,9 @@ MainPage.prototype.share = function(type) {
             var status = message + " " + shareUrl;
             url = "http://twitter.com/home?status=" + status;
             break;
+				case "google":
+						url = "https://plus.google.com/share?url=" + shareUrl;
+						break;
     }
     if(url) {
     	window.open(url,'Share on ' + type,'height=500,width=500');

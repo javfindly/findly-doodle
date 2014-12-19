@@ -117,13 +117,13 @@ Bee.prototype.update = function() {
     return;
   }
 
-  this.player.velocity = { x: 700, y: 400 };
+  this.player.velocity = { x: 1000, y: 500 };
 
   if(this.player.lifeManager.counter > 0) {
-    this.player.canMoveDown = (this.player.pos.y + this.player.size.height) < Config.game.height - 20;
+    this.player.canMoveDown = (this.player.pos.y + this.player.size.height) < Config.game.height - 30;
     this.player.canMoveUp = this.player.pos.y > 10;
     this.player.canMoveLeft = this.player.pos.x > 10;
-    this.player.canMoveRight = (this.player.pos.x + this.player.size.width) < Config.game.width - 10;
+    this.player.canMoveRight = (this.player.pos.x + this.player.size.width) < Config.game.width - 20;
   } else {
     this.player.canMoveDown = false;
     this.player.canMoveUp = false;
@@ -139,6 +139,7 @@ Bee.prototype.initLife = function(game) {
 
 Bee.prototype.restart = function () {
   this.player.lifeManager.restart();
+  this.player.pos = { x: 200, y: 300 };
   _.each(this.entitiesCollected, function (entity) {
     entity.dispose();
     entity = null;
