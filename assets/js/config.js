@@ -7,7 +7,7 @@ var Config = {
     	height: 720,
 			max_collectable: 2,
 			falling_objects_velocity: 100,
-			life: 5
+			life: 1
   	}
 };
 

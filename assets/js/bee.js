@@ -136,6 +136,7 @@ Bee.prototype.initLife = function(game) {
 
 Bee.prototype.restart = function () {
   this.player.lifeManager.restart();
+  this.player.pos = { x: 200, y: 300 };
   _.each(this.entitiesCollected, function (entity) {
     entity.dispose();
     entity = null;

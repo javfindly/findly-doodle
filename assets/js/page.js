@@ -9,10 +9,26 @@ var MainPage = function() {
 
 MainPage.prototype.start = function() {
 	var self = this;
+	$(document).on("click", "#shareOnFacebook", function (evt) {
+		evt.preventDefault();
+		self.share('facebook');
+	});
+
+	$(document).on("click", "#shareOnTwitter", function (evt) {
+		evt.preventDefault();
+		self.share('twitter');
+	});
+
+	$(document).on("click", "#restart", function (evt) {
+		evt.preventDefault();
+		self.restart();
+		$('.gameLost').empty().hide();
+	});
+
 	$(document).bind("game.lost", function(e) {
 		self.gameLost(window.doodle.score.currentScore);
 		window.doodle.freeze();
-	})
+	});
 };
 
 MainPage.prototype.gameLost = function(score) {
@@ -40,7 +56,7 @@ MainPage.prototype.loadTemplate = function(src, callback) {
             if (callback) callback(template);
         }
     });
-}
+};
 
 MainPage.prototype.share = function(type) {
 	var shareUrl = window.location.href;
@@ -58,6 +74,10 @@ MainPage.prototype.share = function(type) {
     if(url) {
     	window.open(url,'Share on ' + type,'height=500,width=500');
     }
-}
+};
+
+MainPage.prototype.restart = function () {
+	window.doodle.restart();
+};
 
 module.exports = MainPage;
