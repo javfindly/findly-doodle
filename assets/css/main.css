@@ -1,6 +1,20 @@
+body
+{
+background: #a7cfdf; /* Old browsers */
+background: -moz-linear-gradient(top,  #a7cfdf 0%, #23538a 100%, #23538a 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a7cfdf), color-stop(100%,#23538a), color-stop(100%,#23538a)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #a7cfdf 0%,#23538a 100%,#23538a 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #a7cfdf 0%,#23538a 100%,#23538a 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #a7cfdf 0%,#23538a 100%,#23538a 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #a7cfdf 0%,#23538a 100%,#23538a 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a7cfdf', endColorstr='#23538a',GradientType=0 ); /* IE6-9 */
+
+}
+
 #game_container {
   width: 800px;
   height: 600px;
+  border: 2px solid #fff;
 }
 
 body {
@@ -16,10 +30,24 @@ body {
   width: 34%;
   font-size: 30px;
   border-radius: 4px;
-  border: 2px solid #900;
+  border: 2px solid #fff;
   background: rgb(255, 125, 77);
-  top: 0%;
-  padding: 10px 0;
+
+	top: 0%;
+  padding: 10px;
   opacity: 0;
   z-index: 10000;
+  background: #ff3019; /* Old browsers */
+background: -moz-linear-gradient(top,  #ff3019 0%, #cf0404 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff3019), color-stop(100%,#cf0404)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #ff3019 0%,#cf0404 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #ff3019 0%,#cf0404 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #ff3019 0%,#cf0404 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #ff3019 0%,#cf0404 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=0 ); /* IE6-9 */
+
 }
+
+.message{
+color:#fff;}
+
