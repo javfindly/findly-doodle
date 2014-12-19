@@ -2,7 +2,7 @@
 
 var CONSTANTS = {
 	HIVE: {
-		TYPE: 'hive'
+		TAG: 'hive'
 	},
 	COLLECTABLE: {
 		TAG: 'candidate',
