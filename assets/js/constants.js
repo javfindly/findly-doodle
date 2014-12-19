@@ -12,23 +12,23 @@ var CONSTANTS = {
 	    COLLECTED: 'COLLECTED',
 	    LOSTED: 'LOSTED',
 	    DISPOSED: 'DISPOSED',
-  	}
+  	},
+		PROPERTIES: {
+			CANDIDATE: {
+				asset: {type: 'sprite', filename: 'hiveblock.png' },
+				points: 3
+			},
+			LIFE: {
+				asset: {type: 'sprite', filename: 'life.png' },
+				points: 0
+			}
+		}
 	},
 	SOUNDS: {
 		COLLECT: 'collectItem',
 		DEPOSIT: 'depositItem',
 		LOSE: 'loseItem',
 		DROP: 'dropItem'
-	},
-	COLLECTABLES_PROPERTIES: {
-		CANDIDATE: {
-			asset: {type: 'sprite', filename: 'hiveblock.png' },
-			points: 3
-		},
-		LIFE: {
-			asset: {type: 'sprite', filename: 'life.png' },
-			points: 0
-		}
 	}
 }
 

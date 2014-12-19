@@ -27,10 +27,10 @@ CollectablesController.prototype.initialize = function () {
 CollectablesController.prototype._assignRandomValues = function () {
   var i = 0;
   for (; i < 9; i++) {
-    this.notRandomTypes[i] = CONSTANTS.COLLECTABLES_PROPERTIES.CANDIDATE;
+    this.notRandomTypes[i] = CONSTANTS.COLLECTABLE.PROPERTIES.CANDIDATE;
   }
   for (; i < 10; i++) {
-    this.notRandomTypes[i] = CONSTANTS.COLLECTABLES_PROPERTIES.LIFE;
+    this.notRandomTypes[i] = CONSTANTS.COLLECTABLE.PROPERTIES.LIFE;
   }
 }
 
