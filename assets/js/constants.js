@@ -19,7 +19,18 @@ var CONSTANTS = {
 		DEPOSIT: 'depositItem',
 		LOSE: 'loseItem',
 		DROP: 'dropItem'
+	},
+	COLLECTABLES_PROPERTIES: {
+		CANDIDATE: {
+			asset: {type: 'sprite', filename: 'hiveblock.png' },
+			points: 3
+		},
+		LIFE: {
+			asset: {type: 'sprite', filename: 'life.png' },
+			points: 0
+		}
 	}
 }
+
 
 module.exports = CONSTANTS;

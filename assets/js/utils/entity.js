@@ -20,6 +20,10 @@ Entity.prototype.addTo = function (layer) {
   this._setPosition();
   this._setSize();
   this._setVelocity();
+  this._setId();
+  this._setPoints();
+  this._setStatus();
+  this._setType();
 
   return this;
 };
@@ -64,6 +68,34 @@ Entity.prototype._setAsset = function () {
 
   this[functionName]();
 };
+
+Entity.prototype._setId  = function () {
+  if (!this.options.id) {
+    return;
+  }
+  this.entity.id = this.options.id;
+}
+
+Entity.prototype._setPoints  = function () {
+  if (!_.isNumber(this.options.points)) {
+    return;
+  }
+  this.entity.points = this.options.points;
+}
+
+Entity.prototype._setStatus  = function () {
+  if (!this.options.status) {
+    return;
+  }
+  this.entity.status = this.options.status;
+}
+
+Entity.prototype._setType  = function () {
+  if (!this.options.type) {
+    return;
+  }
+  this.entity.type = this.options.type;
+}
 
 Entity.prototype._tile = function () {
   this.entity.asset = new PixelJS.Tile();
