@@ -2,11 +2,11 @@
 
 var _ = require('lodash');
 // var PixelJS = require('./vendors/pixel.js');
-var CollectableElement = require('./collectable_element.js');
+var Collectable = require('./collectable.js');
 var CONSTANTS = require('./constants.js');
 var Config = require('./config.js');
 
-var CollectablesController = function (game) {
+var CollectablesManager = function (game) {
   if (!game) {
     throw new Error('Game argument is required.');
   }
@@ -16,7 +16,7 @@ var CollectablesController = function (game) {
   this.initialize();
 };
 
-CollectablesController.prototype.initialize = function () {
+CollectablesManager.prototype.initialize = function () {
   this.elementsLayer = this.game.createLayer("collectables");
   this.previousTime = new Date().getTime();
   this.initialVelocity = Config.game.falling_objects_velocity;
@@ -24,7 +24,7 @@ CollectablesController.prototype.initialize = function () {
   this.createItem();
 };
 
-CollectablesController.prototype._assignRandomValues = function () {
+CollectablesManager.prototype._assignRandomValues = function () {
   var self = this;
   _.each(CONSTANTS.COLLECTABLE.PROPERTIES,function(entity,key){
     for (var i = 0; i < entity.weigth; i++) {
@@ -33,17 +33,17 @@ CollectablesController.prototype._assignRandomValues = function () {
   });
 }
 
-CollectablesController.prototype.dropCollectables = function () {
+CollectablesManager.prototype.dropCollectables = function () {
   _.each(this.itemMap, function(entity){
     entity.update();
   });
 };
 
-CollectablesController.prototype.getItem = function (id) {
+CollectablesManager.prototype.getItem = function (id) {
   return this.itemMap[id];
 };
 
-CollectablesController.prototype.createItem = function () {
+CollectablesManager.prototype.createItem = function () {
   var time = new Date().getTime();
   if ((time - this.previousTime) > 1000) {
     this.initialVelocity += 20;
@@ -60,19 +60,19 @@ CollectablesController.prototype.createItem = function () {
             };
 
   _.extend(options, CONSTANTS.COLLECTABLE.PROPERTIES[this.notRandomTypes[index]]);
-  var collectableElement = new CollectableElement(options);
-  collectableElement.addTo(this.elementsLayer);
-  this.itemMap[collectableElement.entity.id] = collectableElement;
-  this.elementsLayer.registerCollidable(collectableElement.entity);
+  var collectable = new Collectable(options);
+  collectable.addTo(this.elementsLayer);
+  this.itemMap[collectable.entity.id] = collectable;
+  this.elementsLayer.registerCollidable(collectable.entity);
 };
 
-CollectablesController.prototype.removeItem = function (id) {
+CollectablesManager.prototype.removeItem = function (id) {
   if(this.itemMap[id]) {
     delete this.itemMap[id];
   }
 };
 
-CollectablesController.prototype.updateCollectables = function () {
+CollectablesManager.prototype.updateCollectables = function () {
   if (window.freeze === true) {
     return;
   }
@@ -86,16 +86,16 @@ CollectablesController.prototype.updateCollectables = function () {
   }
 }
 
-CollectablesController.prototype.itemMap = function () {
+CollectablesManager.prototype.itemMap = function () {
   return itemMap;
 };
 
-CollectablesController.prototype.restart = function () {
+CollectablesManager.prototype.restart = function () {
   this.initialVelocity = Config.game.falling_objects_velocity;
   this.resetMap();
 };
 
-CollectablesController.prototype.resetMap = function () {
+CollectablesManager.prototype.resetMap = function () {
   _.each(this.itemMap, function (item) {
     item.dispose();
   });
@@ -103,4 +103,4 @@ CollectablesController.prototype.resetMap = function () {
   this.itemMap = {};
 };
 
-module.exports = CollectablesController;
+module.exports = CollectablesManager;

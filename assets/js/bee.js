@@ -2,13 +2,16 @@
 
 
 var PixelJS = require('./vendors/pixel.js');
-var CollectableElement = require('./collectable_element.js');
-var Config = require('./config.js');
+
 var $ = require('jquery');
-var CONSTANTS = require('./constants.js');
 var _ = require('lodash');
-var CollectablesController = require('./collectables_controller.js');
+
+var Config = require('./config.js');
+var CONSTANTS = require('./constants.js');
+
 var LifeManager = require('./life.js');
+var Collectable = require('./collectable.js');
+var CollectablesManager = require('./collectables_manager.js');
 
 var Bee = function(game) {
   _.bindAll(this, 'whenCollision', 'collect', 'drop', 'restart');
@@ -73,7 +76,7 @@ Bee.prototype.collect = function (entity) {
 
 Bee.prototype._candidateCollected = function (entity) {
   this.addEntity(entity);
-  var collectableItem = window.doodle.collectablesController.getItem(entity.id);
+  var collectableItem = window.doodle.CollectablesManager.getItem(entity.id);
   if(collectableItem) {
     collectableItem.attachToBee(this.player);
   }
@@ -98,10 +101,10 @@ Bee.prototype.drop = function (entity) {
 };
 
 Bee.prototype.addEntity = function (entity) {
-  if (!window.doodle.collectablesController.getItem(entity.id)) {
+  if (!window.doodle.CollectablesManager.getItem(entity.id)) {
     return;
   }
-  this.entitiesCollected[entity.id] = window.doodle.collectablesController.getItem(entity.id);
+  this.entitiesCollected[entity.id] = window.doodle.CollectablesManager.getItem(entity.id);
   this.history.collectedIds.push(entity.id);
   this.history.count++;
 };

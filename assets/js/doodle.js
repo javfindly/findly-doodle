@@ -4,9 +4,9 @@ var PixelJS = require('./vendors/pixel.js');
 var Bee = require('./bee.js');
 var Hive = require('./hive.js');
 var Config = require('./config.js');
-var CollectableElement = require('./collectable_element.js');
+var Collectable = require('./collectable.js');
 var Background = require('./background/background.js');
-var CollectablesController = require('./collectables_controller.js');
+var CollectablesManager = require('./collectables_manager.js');
 var Score = require('./score.js');
 var Effects = require('./effects.js');
 var SoundManager = require('./sound_manager.js');
@@ -36,7 +36,7 @@ Doodle.prototype.initialize = function() {
 Doodle.prototype.loadElements = function () {
   this.background = this.loadBackground();
   this.hive = this.loadHive();
-  this.collectablesController = this.loadCollectablesElements();
+  this.CollectablesManager = this.loadCollectablesElements();
   this.beePlayer = this.loadBee();
   this.score = this.loadScore();
   this.soundManager = this.loadSoundManager();
@@ -51,7 +51,7 @@ Doodle.prototype.start = function() {
     if (window.freeze === true) {
       return;
     }
-    thisDoodle.collectablesController.updateCollectables();
+    thisDoodle.CollectablesManager.updateCollectables();
     thisDoodle.beePlayer.update();
     thisDoodle.background.update();
   });
@@ -81,7 +81,7 @@ Doodle.prototype.loadSoundManager = function () {
 };
 
 Doodle.prototype.loadCollectablesElements = function () {
-  return new CollectablesController(this.game);
+  return new CollectablesManager(this.game);
 };
 
 Doodle.prototype.loadEffectsManager = function() {
@@ -98,7 +98,7 @@ Doodle.prototype.unfreeze = function () {
 
 Doodle.prototype.restart = function () {
   this.beePlayer.restart();
-  this.collectablesController.restart();
+  this.CollectablesManager.restart();
   this.score.restart();
 
   window.freeze = false;

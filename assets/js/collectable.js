@@ -7,16 +7,16 @@ var config = require('./config.js');
 var _ = require('lodash');
 var Entity = require('./utils/entity.js');
 
-var CollectableElement = function (options) {
+var Collectable = function (options) {
   _.bindAll(this, 'fall', 'pickUp', 'collect', 'dispose');
   Entity.call(this, options);
 };
 
-CollectableElement.prototype = Entity.prototype;
+Collectable.prototype = Entity.prototype;
 
-CollectableElement.prototype.CONSTANTS = CONSTANTS;
+Collectable.prototype.CONSTANTS = CONSTANTS;
 
-CollectableElement.prototype.update = function () {
+Collectable.prototype.update = function () {
   if (window.freeze === true) {
     return;
   }
@@ -29,10 +29,10 @@ CollectableElement.prototype.update = function () {
   actions[this.entity.status](this.entity);
 };
 
-CollectableElement.prototype.fall = function (entity) {
+Collectable.prototype.fall = function (entity) {
     if (entity.pos.y > config.game.height) {
     this.dispose();
-    window.doodle.collectablesController.removeItem(entity.id);
+    window.doodle.CollectablesManager.removeItem(entity.id);
     if (entity.type === 'LIFE') {
         return;
     }
@@ -41,29 +41,29 @@ CollectableElement.prototype.fall = function (entity) {
   entity.moveDown();
 };
 
-CollectableElement.prototype.pickUp = function (entity) {
+Collectable.prototype.pickUp = function (entity) {
   entity.moveTo(entity.attached.pos.x, entity.attached.pos.y + entity.attached.size.height - 10, 100);
 };
 
-CollectableElement.prototype.collect = function (entity) {
+Collectable.prototype.collect = function (entity) {
   this.changeStatus(CONSTANTS.COLLECTABLE.STATUS.DISPOSED);
   entity.fadeTo(0, 500, this.dispose);
-  window.doodle.collectablesController.removeItem(entity.id);
+  window.doodle.CollectablesManager.removeItem(entity.id);
   window.doodle.effectsManager.createSparks(entity.pos);
 };
 
-CollectableElement.prototype.dispose = function () {
+Collectable.prototype.dispose = function () {
   this.entity.dispose();
 };
 
-CollectableElement.prototype.changeStatus = function(newStatus) {
+Collectable.prototype.changeStatus = function(newStatus) {
   this.entity.status = newStatus;
 }
 
-CollectableElement.prototype.attachToBee = function(bee) {
+Collectable.prototype.attachToBee = function(bee) {
   this.changeStatus(CONSTANTS.COLLECTABLE.STATUS.PICKED_UP);
   this.entity.attached = bee;
 }
 
 
-module.exports = CollectableElement;
+module.exports = Collectable;
