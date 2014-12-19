@@ -23,7 +23,7 @@ Entity.prototype.addTo = function (layer) {
   this._setId();
   this._setPoints();
   this._setStatus();
-  this._setType();
+  this._setTag();
 
   return this;
 };
@@ -90,11 +90,11 @@ Entity.prototype._setStatus  = function () {
   this.entity.status = this.options.status;
 }
 
-Entity.prototype._setType  = function () {
-  if (!this.options.type) {
+Entity.prototype._setTag  = function () {
+  if (!this.options.tag) {
     return;
   }
-  this.entity.type = this.options.type;
+  this.entity.tag = this.options.tag;
 }
 
 Entity.prototype._tile = function () {

@@ -47,13 +47,13 @@ var Bee = function(game) {
 
 
 Bee.prototype.whenCollision = function (entity) {
-  switch(entity.type) {
+  switch(entity.tag) {
     case CONSTANTS.COLLECTABLE.TAG:
       if (!_.contains(this.history.collectedIds, entity.id)) {
         this.collect(entity);
       }
       break;
-    case CONSTANTS.HIVE.TYPE:
+    case CONSTANTS.HIVE.TAG:
       if (Object.keys(this.entitiesCollected).length > 0) {
         this.drop(entity);
       }
@@ -66,8 +66,8 @@ Bee.prototype.collect = function (entity) {
     return;
   }
 
-  if (this['_' + entity.type + 'Collected'] instanceof Function) {
-    this['_' + entity.type + 'Collected'](entity);
+  if (this['_' + entity.tag + 'Collected'] instanceof Function) {
+    this['_' + entity.tag + 'Collected'](entity);
   }
 };
 
