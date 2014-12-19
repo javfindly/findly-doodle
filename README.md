@@ -22,3 +22,7 @@ npm run build
 And start the application on [localhost:8000](http://localhost:8000) using :
 
 npm start
+
+To redeploy changes continuously:
+
+gulp js
