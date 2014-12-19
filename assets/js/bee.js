@@ -88,6 +88,9 @@ Bee.prototype.drop = function (entity) {
     }
     item.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
     window.doodle.soundManager.play(CONSTANTS.SOUNDS.DEPOSIT);
+    if (item.entity.type === 'LIFE') {
+      $(document).trigger("game.lifeWon");
+    }
     pointCollected += item.entity.points;
     thisBee.removeEntity(item.entity);
   });
@@ -136,7 +139,6 @@ Bee.prototype.initLife = function(game) {
 
 Bee.prototype.restart = function () {
   this.player.lifeManager.restart();
-  this.player.pos = { x: 200, y: 300 };
   _.each(this.entitiesCollected, function (entity) {
     entity.dispose();
     entity = null;

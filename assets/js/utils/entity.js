@@ -24,6 +24,7 @@ Entity.prototype.addTo = function (layer) {
   this._setPoints();
   this._setStatus();
   this._setTag();
+  this._setType();
 
   return this;
 };
@@ -96,6 +97,14 @@ Entity.prototype._setTag  = function () {
   }
   this.entity.tag = this.options.tag;
 }
+
+Entity.prototype._setType  = function () {
+  if (!this.options.type) {
+    return;
+  }
+  this.entity.type = this.options.type;
+}
+
 
 Entity.prototype._tile = function () {
   this.entity.asset = new PixelJS.Tile();
