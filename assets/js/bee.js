@@ -48,7 +48,7 @@ var Bee = function(game) {
 
 Bee.prototype.whenCollision = function (entity) {
   switch(entity.type) {
-    case CONSTANTS.COLLECTABLE.TYPE:
+    case CONSTANTS.COLLECTABLE.TAG:
       if (!_.contains(this.history.collectedIds, entity.id)) {
         this.collect(entity);
       }

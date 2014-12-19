@@ -5,7 +5,7 @@ var CONSTANTS = {
 		TYPE: 'hive'
 	},
 	COLLECTABLE: {
-		TYPE: 'candidate',
+		TAG: 'candidate',
   	STATUS: {
 	    FALLING: 'FALLING',
 	    PICKED_UP:'PICKED_UP',

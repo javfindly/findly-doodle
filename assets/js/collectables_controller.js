@@ -53,7 +53,7 @@ CollectablesController.prototype.createItem = function () {
             x: Math.floor(Math.random() * 600) + 1, y: 0,
             velocity: { x:0, y:this.initialVelocity },
             id: "collectable_" + (new Date().getTime()),
-            type: CONSTANTS.COLLECTABLE.TYPE,
+            type: CONSTANTS.COLLECTABLE.TAG,
             status: CONSTANTS.COLLECTABLE.STATUS.FALLING
             };
   var index = Math.floor(Math.random() * this.notRandomTypes.length);
