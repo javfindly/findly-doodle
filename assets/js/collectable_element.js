@@ -46,6 +46,7 @@ CollectableElement.prototype.collect = function (entity) {
   this.changeStatus(CONSTANTS.COLLECTABLE.STATUS.DISPOSED);
   entity.fadeTo(0, 500, this.dispose);
   window.doodle.collectablesController.removeItem(entity.id);
+  window.doodle.effectsManager.createSparks(entity.pos);
 };
 
 CollectableElement.prototype.dispose = function () {

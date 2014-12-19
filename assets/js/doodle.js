@@ -8,6 +8,7 @@ var CollectableElement = require('./collectable_element.js');
 var Background = require('./background/background.js');
 var CollectablesController = require('./collectables_controller.js');
 var Score = require('./score.js');
+var Effects = require('./effects.js');
 var SoundManager = require('./sound_manager.js');
 var CONSTANTS = require('./constants.js');
 var $ = require('jquery');
@@ -39,6 +40,7 @@ Doodle.prototype.loadElements = function () {
   this.beePlayer = this.loadBee();
   this.score = this.loadScore();
   this.soundManager = this.loadSoundManager();
+  this.effectsManager = this.loadEffectsManager();
 
 };
 
@@ -81,6 +83,10 @@ Doodle.prototype.loadSoundManager = function () {
 Doodle.prototype.loadCollectablesElements = function () {
   return new CollectablesController(this.game);
 };
+
+Doodle.prototype.loadEffectsManager = function() {
+  return new Effects(this.game);
+}
 
 Doodle.prototype.freeze = function () {
   window.freeze = true;
