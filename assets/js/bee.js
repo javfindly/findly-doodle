@@ -89,7 +89,7 @@ Bee.prototype.drop = function (entity) {
     item.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
     window.doodle.soundManager.play(CONSTANTS.SOUNDS.DEPOSIT);
     if (item.entity.type === 'LIFE') {
-      thisBee.player.lifeManager.addLife();
+      $(document).trigger("game.lifeWon");
     }
     pointCollected += item.entity.points;
     thisBee.removeEntity(item.entity);

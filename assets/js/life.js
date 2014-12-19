@@ -13,10 +13,11 @@ var Life = function (game) {
 };
 
 Life.prototype.initialize = function () {
-  _.bindAll(this, 'lifeLost');
+  _.bindAll(this, 'lifeLost', 'lifeWon');
   this.counter = Config.game.life;
   this.layer = this.game.createLayer("life");
   $(document).on("game.lifeLost", this.lifeLost);
+  $(document).on("game.lifeWon", this.lifeWon);
 };
 
 
@@ -32,7 +33,7 @@ Life.prototype.showLife = function (i) {
   this.lifes.push(lifeEntity);
 };
 
-Life.prototype.addLife = function () {
+Life.prototype.lifeWon = function () {
   if (this.counter >= Config.game.life) {
     return;
   }
@@ -69,7 +70,7 @@ Life.prototype.lifeLost = function() {
   if (--this.counter <= 0) {
     $(document).trigger("game.lost");
   }
-  var removedLife = this.lifes.shift();
+  var removedLife = this.lifes.pop();
   if(removedLife) {
     removedLife.dispose();
     removedLife = null;
