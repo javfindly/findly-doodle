@@ -36,9 +36,14 @@ Score.prototype.updateScore = function(points) {
     60,
     75,
     '30pt "Trebuchet MS", Helvetica, sans-serif',
-    '#F22F',
+    '#F22',
     'center'
   );
-}
+};
+
+Score.prototype.restart = function () {
+  this.currentScore = 0;
+  this.updateScore(0);
+};
 
 module.exports = Score;

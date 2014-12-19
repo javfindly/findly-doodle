@@ -4,21 +4,37 @@ var _ = require('lodash');
 // var PixelJS = require('./vendors/pixel.js');
 var CollectableElement = require('./collectable_element.js');
 var CONSTANTS = require('./constants.js');
+var Config = require('./config.js');
 
 var CollectablesController = function (game) {
-  this.elementsLayer = game.createLayer("collectables");
-  this.previousTime = new Date().getTime();
+  if (!game) {
+    throw new Error('Game argument is required.');
+  }
+  this.game = game;
   this.itemMap = {};
-  //starting the first collectable element
-  this.initialVelocity = 100;
-  var velocity = {x:0, y: this.initialVelocity};
-  var collectableElement = new CollectableElement(this.elementsLayer, velocity);
-  this.itemMap[collectableElement.collectableEntity.id] = collectableElement;
-
+  this.notRandomTypes = [];
+  this.initialize();
 };
 
+CollectablesController.prototype.initialize = function () {
+  this.elementsLayer = this.game.createLayer("collectables");
+  this.previousTime = new Date().getTime();
+  this.initialVelocity = Config.game.falling_objects_velocity;
+  this._assignRandomValues();
+  this.createItem();
+};
+
+CollectablesController.prototype._assignRandomValues = function () {
+  var self = this;
+  _.each(CONSTANTS.COLLECTABLE.PROPERTIES,function(entity,key){
+    for (var i = 0; i < entity.weigth; i++) {
+      self.notRandomTypes.push(key);
+    }
+  });
+}
+
 CollectablesController.prototype.dropCollectables = function () {
-  _.each(this.itemMap, function(entity, key){
+  _.each(this.itemMap, function(entity){
     entity.update();
   });
 };
@@ -32,11 +48,22 @@ CollectablesController.prototype.createItem = function () {
   if ((time - this.previousTime) > 1000) {
     this.initialVelocity += 20;
   }
-  var velocity = {x:0, y: this.initialVelocity};
-  var item = new CollectableElement(this.elementsLayer, velocity);
-  this.itemMap[item.collectableEntity.id] = item;
-  window.doodle.soundManager.play(CONSTANTS.SOUNDS.DROP);
 
+  var index = Math.floor(Math.random() * this.notRandomTypes.length);
+  var options = { name: 'collectable',
+            x: Math.floor(Math.random() * 600) + 1, y: 0,
+            velocity: { x:0, y:this.initialVelocity },
+            id: "collectable_" + (new Date().getTime()),
+            tag: CONSTANTS.COLLECTABLE.TAG,
+            status: CONSTANTS.COLLECTABLE.STATUS.FALLING,
+            type: this.notRandomTypes[index]
+            };
+
+  _.extend(options, CONSTANTS.COLLECTABLE.PROPERTIES[this.notRandomTypes[index]]);
+  var collectableElement = new CollectableElement(options);
+  collectableElement.addTo(this.elementsLayer);
+  this.itemMap[collectableElement.entity.id] = collectableElement;
+  this.elementsLayer.registerCollidable(collectableElement.entity);
 };
 
 CollectablesController.prototype.removeItem = function (id) {
@@ -46,16 +73,34 @@ CollectablesController.prototype.removeItem = function (id) {
 };
 
 CollectablesController.prototype.updateCollectables = function () {
+  if (window.freeze === true) {
+    return;
+  }
+
   var time = new Date().getTime();
   this.dropCollectables();
   if ((time - this.previousTime) > 2000) {
       this.createItem();
+      window.doodle.soundManager.play(CONSTANTS.SOUNDS.DROP);
       this.previousTime = time;
   }
 }
 
 CollectablesController.prototype.itemMap = function () {
   return itemMap;
+};
+
+CollectablesController.prototype.restart = function () {
+  this.initialVelocity = Config.game.falling_objects_velocity;
+  this.resetMap();
+};
+
+CollectablesController.prototype.resetMap = function () {
+  _.each(this.itemMap, function (item) {
+    item.dispose();
+  });
+
+  this.itemMap = {};
 };
 
 module.exports = CollectablesController;
