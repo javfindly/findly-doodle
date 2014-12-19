@@ -32,6 +32,14 @@ Life.prototype.showLife = function (i) {
   this.lifes.push(lifeEntity);
 };
 
+Life.prototype.addLife = function () {
+  if (this.counter >= Config.game.life) {
+    return;
+  }
+  this.showLife(this.counter);
+  this.counter++;
+}
+
 
 Life.prototype.render = function () {
   var i = 0;

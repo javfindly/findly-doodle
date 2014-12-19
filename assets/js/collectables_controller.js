@@ -48,14 +48,17 @@ CollectablesController.prototype.createItem = function () {
   if ((time - this.previousTime) > 1000) {
     this.initialVelocity += 20;
   }
+
+  var index = Math.floor(Math.random() * this.notRandomTypes.length);
   var options = { name: 'collectable',
             x: Math.floor(Math.random() * 600) + 1, y: 0,
             velocity: { x:0, y:this.initialVelocity },
             id: "collectable_" + (new Date().getTime()),
             tag: CONSTANTS.COLLECTABLE.TAG,
-            status: CONSTANTS.COLLECTABLE.STATUS.FALLING
+            status: CONSTANTS.COLLECTABLE.STATUS.FALLING,
+            type: this.notRandomTypes[index]
             };
-  var index = Math.floor(Math.random() * this.notRandomTypes.length);
+
   _.extend(options, CONSTANTS.COLLECTABLE.PROPERTIES[this.notRandomTypes[index]]);
   var collectableElement = new CollectableElement(options);
   collectableElement.addTo(this.elementsLayer);
