@@ -30,7 +30,7 @@ var Hive = function(game) {
   hiveLayer.registerCollidable(hiveCollector);
 
   function collideCandidate(entity) {
-    if(entity.type == CONSTANTS.COLLECTABLE.TYPE) {
+    if(entity.type == CONSTANTS.COLLECTABLE.TAG) {
       var collectable = window.doodle.collectablesController.getItem(entity.id);
       if(collectable && collectable.status == CONSTANTS.COLLECTABLE.PICKED_UP) {
         collectable.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
