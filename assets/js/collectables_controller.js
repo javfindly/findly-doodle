@@ -25,13 +25,12 @@ CollectablesController.prototype.initialize = function () {
 };
 
 CollectablesController.prototype._assignRandomValues = function () {
-  var i = 0;
-  for (; i < 9; i++) {
-    this.notRandomTypes[i] = CONSTANTS.COLLECTABLE.PROPERTIES.CANDIDATE;
-  }
-  for (; i < 10; i++) {
-    this.notRandomTypes[i] = CONSTANTS.COLLECTABLE.PROPERTIES.LIFE;
-  }
+  var self = this;
+  _.each(CONSTANTS.COLLECTABLE.PROPERTIES,function(entity,key){
+    for (var i = 0; i < entity.weigth; i++) {
+      self.notRandomTypes.push(key);
+    }
+  });
 }
 
 CollectablesController.prototype.dropCollectables = function () {
@@ -57,7 +56,7 @@ CollectablesController.prototype.createItem = function () {
             status: CONSTANTS.COLLECTABLE.STATUS.FALLING
             };
   var index = Math.floor(Math.random() * this.notRandomTypes.length);
-  _.extend(options, this.notRandomTypes[index]);
+  _.extend(options, CONSTANTS.COLLECTABLE.PROPERTIES[this.notRandomTypes[index]]);
   var collectableElement = new CollectableElement(options);
   collectableElement.addTo(this.elementsLayer);
   this.itemMap[collectableElement.entity.id] = collectableElement;
