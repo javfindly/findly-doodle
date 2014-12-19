@@ -3,10 +3,12 @@
 var Config = {
 	game : {
     	container: 'game_container',
-    	width: 800,
-    	height: 600,
-			max_collectable: 2
+    	width: 1024,
+    	height: 720,
+			max_collectable: 2,
+			falling_objects_velocity: 100,
+			life: 5
   	}
-}
+};
 
 module.exports = Config;
