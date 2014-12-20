@@ -104,4 +104,28 @@ Doodle.prototype.restart = function () {
   window.freeze = false;
 };
 
+Doodle.prototype.handlePanEvent = function (ev) {
+  if (!ev) {
+    return;
+  }
+
+  switch (ev.type) {
+    case 'panleft':
+      this.beePlayer.player.moveLeft();
+      break;
+
+    case 'panup':
+      this.beePlayer.player.moveUp();
+      break;
+
+    case 'panright':
+      this.beePlayer.player.moveRight();
+      break;
+
+    case 'pandown':
+      this.beePlayer.player.moveDown();
+      break;
+    }
+};
+
 module.exports = Doodle;

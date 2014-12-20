@@ -48,6 +48,9 @@ var Bee = function(game) {
   this.initLife(game);
 };
 
+Bee.prototype.addEventListener = function (type, handler, bool) {
+;
+};
 
 Bee.prototype.whenCollision = function (entity) {
   switch(entity.tag) {
@@ -154,5 +157,10 @@ Bee.prototype.restart = function () {
     collectedIds: []
   };
 };
+
+// Bee.prototype.move = function(game) {
+//   this.player.lifeManager = new LifeManager(game);
+//   this.player.lifeManager.render();
+// };
 
 module.exports = Bee;
