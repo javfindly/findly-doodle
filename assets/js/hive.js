@@ -1,7 +1,7 @@
 "use strict";
 
 var PixelJS = require('./vendors/pixel.js');
-var CollectableElement = require('./collectable_element.js');
+var Collectable = require('./collectable.js');
 var CONSTANTS = require('./constants.js');
 var Config = require('./config.js');
 
@@ -31,7 +31,7 @@ var Hive = function(game) {
 
   function collideCandidate(entity) {
     if(entity.tag == CONSTANTS.COLLECTABLE.TAG) {
-      var collectable = window.doodle.collectablesController.getItem(entity.id);
+      var collectable = window.doodle.CollectablesManager.getItem(entity.id);
       if(collectable && collectable.status == CONSTANTS.COLLECTABLE.PICKED_UP) {
         collectable.changeStatus(CONSTANTS.COLLECTABLE.STATUS.COLLECTED);
         window.doodle.soundManager.play(CONSTANTS.SOUNDS.DEPOSIT);

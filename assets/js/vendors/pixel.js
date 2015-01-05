@@ -1282,7 +1282,7 @@ PixelJS.Player.prototype.addToLayer = function (layer) {
         if (window.freeze === true) {
           return;
         }
-        
+
         switch (keyCode) {
             case PixelJS.Keys.Left:
                 self.direction |= PixelJS.Directions.Left;
